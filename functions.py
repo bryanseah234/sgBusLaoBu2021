@@ -1,5 +1,4 @@
 import json
-import PIL
 import time
 import csv
 import sqlite3
