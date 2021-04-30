@@ -1,0 +1,24 @@
+HOW TO GET TO AN MRT STATION 101
+#-------------------------------------
+get user input on which mrt station
+check bus stop code near mrt station
+check buses available at that bus stop
+store
+check buses' routes
+store
+#-------------------------------------
+Get user location
+Get nearest bus stop to the coordinates (use module)
+store
+#-------------------------------------
+check if current bus stop has bus to the mrt station
+Display bus stop code
+Display bus number to take
+Display bus frequency
+display number of stops to take
+Display Distance to the nearest bus stop
+Display Weather
+
+EXTRA FEATURES
+#-------------------------------------
+display different bus stop companies and the number of services they operate
