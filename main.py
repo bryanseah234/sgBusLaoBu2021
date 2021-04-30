@@ -55,7 +55,7 @@ gas = companies.countcategories(gas_categories)
 '''Start of Flask WebApp'''
 googlemapskey = os.environ['GOOGLEMAPS']
 app = Flask(__name__, template_folder='templates')
-GoogleMaps(app, key=googlemapskey)
+GoogleMaps(app, key="AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU")
 
 
 @app.after_request
