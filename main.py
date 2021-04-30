@@ -53,7 +53,7 @@ gas = companies.countcategories(gas_categories)
 # json_2_db('json/bus_stops.json', 'database/main.db', commands["createbusstopstable"], commands["insertbusstops"])
 
 '''Start of Flask WebApp'''
-googlemapskey = os.environ['GOOGLEMAPS']
+# googlemapskey = os.environ['GOOGLEMAPS']
 app = Flask(__name__, template_folder='templates')
 GoogleMaps(app, key="AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU")
 
