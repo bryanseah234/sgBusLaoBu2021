@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv='cache-control' content='no-cache'> 
+        <meta http-equiv='expires' content='0'> 
+        <meta http-equiv='pragma' content='no-cache'> 
+        <title>
+            Bus Laobu 🚌
+        </title>
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}">
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>      
+        <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <!-- BG Audio -->
+        <embed src="/static/wheels.mp3" width="5" height="5" loop="true" autostart="true" hidden="true"/>
+        <!-- Javascript -->
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+
+        <style>
+            .container-fluid {
+                color: white;
+                text-align: center;
+                margin-top: 60px;
+                margin-bottom: auto;
+            }
+            #form1{
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #form2{
+                max-width: 230px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 13px;
+            }
+            #button{
+                max-width: auto;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 13px;
+            }
+            h2 {
+                font-size: 60px;
+                font-weight: 500px;
+            }
+            h3 {
+                font-size: 20px;
+                font-weight: 500px;
+                font-color: white;
+                padding: 10px;
+            }
+            h4 {
+                font-size: 18px;
+                font-weight: 500px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 10px;
+            }
+            h6 {
+                font-size: 14px;
+                font-weight: 500px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 10px;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div class = "container-fluid">
+            <h2>Laobu Bus Facts 🚍</h2>
+            <h4>Hello there! Laobu is here to tell you some facts about SG bus companies.<br>Laobu hopes you find them useful and learn something today :-)</h4>
+        </div>
+
+        <div class = "table">
+            <table class='sortable'>
+            
+            <tr>
+                <th><h3>SG Bus Fleet Breakdown</h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Trunk</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Express</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Feeder</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Townlink</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Citylink</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">2-Tier Flat Fare</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Industrial</a></h3></th>
+                <th scope="col"><h3><a href="https://en.wikipedia.org/wiki/Public_buses_of_Singapore#Routes">Night Rider</a></h3></th>
+                <th scope="col"><h3>Total Count</h3></th>	
+            </tr>
+            
+            <tr class='item'>
+                <th scope="row"><h3><a href="https://en.wikipedia.org/wiki/SBS_Transit">SBS Transit</a></h3></th>
+                <td><h3>{{ sbst["Trunk"] }}</h3></td>
+                <td><h3>{{ sbst["Express"] }}</h3></td>
+                <td><h3>{{ sbst["Feeder"] }}</h3></td>
+                <td><h3>{{ sbst["Townlink"] }}</h3></td>
+                <td><h3>{{ sbst["Citylink"] }}</h3></td>
+                <td><h3>{{ sbst["2-Tier Flat Fare"] }}</h3></td>
+                <td><h3>{{ sbst["Industrial"] }}</h3></td>
+                <td><h3>{{ sbst["Night Rider"] }}</h3></td>
+                <td><h3>{{ sbst_len }}</h3></td>
+            </tr>
+            
+            <tr class='item'>
+                <th scope="row"><h3><a href="https://en.wikipedia.org/wiki/SMRT_Buses">SMRT</a></h3></th>
+                <td><h3>{{ smrt["Trunk"] }}</h3></td>
+                <td><h3>{{ smrt["Express"] }}</h3></td>
+                <td><h3>{{ smrt["Feeder"] }}</h3></td>
+                <td><h3>{{ smrt["Townlink"] }}</h3></td>
+                <td><h3>{{ smrt["Citylink"] }}</h3></td>
+                <td><h3>{{ smrt["2-Tier Flat Fare"] }}</h3></td>
+                <td><h3>{{ smrt["Industrial"] }}</h3></td>
+                <td><h3>{{ smrt["Night Rider"] }}</h3></td>
+                <td><h3>{{ smrt_len }}</td>
+            </tr>
+
+            <tr class='item'>
+                <th scope="row"><h3><a href="https://en.wikipedia.org/wiki/Tower_Transit_Singapore">Tower Transit Singapore</a></h3></th>
+                <td><h3>{{ tts["Trunk"] }}</h3></td>
+                <td><h3>{{ tts["Express"] }}</h3></td>
+                <td><h3>{{ tts["Feeder"] }}</h3></td>
+                <td><h3>{{ tts["Townlink"] }}</h3></td>
+                <td><h3>{{ tts["Citylink"] }}</h3></td>
+                <td><h3>{{ tts["2-Tier Flat Fare"] }}</h3></td>
+                <td><h3>{{ tts["Industrial"] }}</h3></td>
+                <td><h3>{{ tts["Night Rider"] }}</h3></td>
+                <td><h3>{{ tts_len }}</td>
+            </tr>
+
+            <tr class='item'>
+                <th scope="row"><h3><a href="https://en.wikipedia.org/wiki/Go-Ahead_Singapore">Go-Ahead Singapore</a></h3></th>
+                <td><h3>{{ gas["Trunk"] }}</h3></td>
+                <td><h3>{{ gas["Express"] }}</h3></td>
+                <td><h3>{{ gas["Feeder"] }}</h3></td>
+                <td><h3>{{ gas["Townlink"] }}</h3></td>
+                <td><h3>{{ gas["Citylink"] }}</h3></td>
+                <td><h3>{{ gas["2-Tier Flat Fare"] }}</h3></td>
+                <td><h3>{{ gas["Industrial"] }}</h3></td>
+                <td><h3>{{ gas["Night Rider"] }}</h3></td>
+                <td><h3>{{ gas_len }}</h3></td>
+            </tr>
+
+            </table>
+        </div>
+
+
+        <div class="footer">
+            <div class="footer_contents">
+                <h6>
+                Made with ❤️, ⏰, and 🚌 by 
+                <a href="https://hong-yi.me/work/bryanseah234">bryanseah234</a><br>
+                Inspired by
+                <a href="https://t.me/rainkorkorbot">Rain Korkor</a><br>
+                Get some <a href="/help">help </a>
+                </h6>
+            </div>
+        </div>
+
+    
+    </body>
+
+</html>

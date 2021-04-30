@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv='cache-control' content='no-cache'> 
+        <meta http-equiv='expires' content='0'> 
+        <meta http-equiv='pragma' content='no-cache'> 
+        <title>
+            Bus Laobu 🚌
+        </title>
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}"/>
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <!-- BG Audio -->
+        <embed src="/static/wheels.mp3" width="5" height="5" loop="true" autostart="true" hidden="true"/>
+        <!-- Scripts -->
+        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+        <script>
+        var slider = document.getElementById("slider");
+        var output = document.getElementById("radius");
+        output.innerHTML = slider.value;
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+        </script>
+
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"/>  
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+        <script>
+            $(document).ready( function () {
+                $('#table_id').DataTable({
+
+                    autoWidth: true,
+                    info: false,
+                    searching: false,
+                    paging: true,
+                    scrollCollapse: true,
+                    scrollX: false,
+                    pagingType: "numbers",
+                    lengthChange: true
+                });
+
+            } );
+        </script> -->
+
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU&callback=initMap">
+        </script>
+        <script>
+
+
+            function initMap() {
+
+                var locations = [
+                    ['Bondi Beach', -33.890542, 151.274856, 4],
+                    ['Coogee Beach', -33.923036, 151.259052, 5],
+                    ['Cronulla Beach', -34.028249, 151.157507, 3],
+                    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+                    ['Maroubra Beach', -33.950198, 151.259302, 1]
+                    ];
+
+                const myLatLng = { lat: -25.363, lng: 131.044 };
+                const bus = {lat: -34.397, lng: 150.644};
+
+                const map = new google.maps.Map(document.getElementById("map"), 
+                {
+                    zoom: 15,
+                    center: myLatLng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+
+                new google.maps.Marker(
+                    {
+                    icon: 'https://maps.gstatic.com/mapfiles/transit/iw2/6/bus.png',
+                    position: bus,
+                    map,
+                    title: "<b>busss</b>"
+                    });
+
+                var marker, i;
+
+                for (i = 0; i < locations.length; i++) {  
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: 'https://maps.gstatic.com/mapfiles/transit/iw2/6/bus.png'
+                });
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                    infowindow.setContent(locations[i][0]);
+                    infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                }
+            }
+
+
+        </script>
+        <!-- Styling -->
+        <style>
+            .container-fluid {
+                color: white;
+                text-align: center;
+                margin-top: 60px;
+                margin-bottom: auto;
+            }
+            #form1{
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #form2{
+                max-width: 230px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 13px;
+            }
+            #button{
+                max-width: auto;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 13px;
+            }
+            table {
+                width: 80%;
+                border: 1px;
+                border-color: white;
+                border-collapse: collapse;
+                padding: 10px
+            }                    
+            h2 {
+                font-size: 60px;
+                font-weight: 500px;
+            }
+            h3 {
+                font-size: 20px;
+                font-weight: 500px;
+            }
+            h4 {
+                font-size: 18px;
+                font-weight: 500px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 10px;
+            }
+            h6 {
+                font-size: 14px;
+                font-weight: 500px;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 10px;
+            }
+        </style>
+
+    </head>
+
+    <body onload='initMap()'>
+
+        <div class = "container-fluid">
+            <h2>Laobu Bus Finder 🚏</h2>
+            <h4>
+                You are at:<br>
+                {% if userlat and userlon and radius is not none %}
+                Latitude: {{ userlat }}<br>
+                Longitude: {{ userlon }}<br>
+                LaoBu searched for buses within {{ radius }}km
+                {% elif userlat or userlon or radius is none %}
+                Latitude: Cannot be determined<br>
+                Longitude: Cannot be determined<br>
+                Laobu unable to search for bus within given distance
+                {% endif %}
+            </h4>
+            <h4>
+                Information displayed are inaccurate? Don't worry!<br>Click the button below to fetch your new coordinates.
+            </h4>
+            <form id='form2' action='/getyourlocation' method='GET'>
+                <button id='button' type="submit" class="btn btn-primary btn-block btn-large">Get New Location</button>
+            </form>
+        </div>
+
+        <div id='map' class="container">
+            <div id="map" style="width:500px; height:400px;"></div>
+            {{ mymap }}
+        </div>
+        
+        <div class = "table">
+            <table class="sortable">
+                <!-- <thead> -->
+                <tr>
+                    <th><h3>Closest Mrt Station</h3></th>
+                    <th><h3>Mrt Line</h3></th>
+
+                    <th><h3>Distance</h3></th>
+                    <th><h3>Boarding Stop</h3></th>
+                    <th><h3>Bus Stop Code</h3></th>
+
+                    <th><h3>Bus Service</h3></th>
+                    <th><h3>Stops to Take</h3></th>
+                    <th><h3>Alighting Stop</h3></th>                
+                <tr>
+                <!-- </thead>
+                <tbody> -->
+                {% if data|length %}
+                    {% for row in data %}
+                        <tr class="item">
+                            <td><h3>{{ row['mrt_station'] }}</h3></td>
+                            <td><h3>{{ row['mrt_line'] }}</h3></td>
+                            <td><h3>{{ row['walkdistance'] }}</h3></td>
+                            <td><h3>{{ row['board_busstopdescription'] }}</h3></td>
+                            <td><h3>{{ row['busstopcode'] }}</h3></td>
+                            <td><h3>{{ row['busservice'] }}</h3></td>
+                            <td><h3>{{ row['numberofstops'] }}</h3></td>
+                            <td><h3>{{ row['alight_busstopdescription'] }}</h3></td>
+                        </tr>
+                    {% endfor %}
+
+                {% else %}
+                    <tr class="item">
+                        <td><h3>NIL</h3></td>
+                        <td><h3>Laobu Can't Find<br>Mrt Near You</h3></td>
+                        <td><h3>NIL</h3></td>
+                        <td><h3>NIL</h3></td>
+                        <td><h3>NIL</h3></td>
+                        <td><h3>NIL</h3></td>
+                        <td><h3>NIL</h3></td>
+                        <td><h3>Laobu Can't Find<br>Mrt Near You</h3></td>
+                    </tr>
+                {% endif %}
+                <!-- </tbody> -->
+
+            </table>
+        </div>
+
+        <div class="footer">
+            <div class="footer_contents">
+                <h6>
+                Made with 🩸, 💦, and 😭 by 
+                <a href="https://hong-yi.me/work/bryanseah234">bryanseah234</a><br>
+                Inspired by
+                <a href="https://t.me/rainkorkorbot">Rain Korkor</a><br>
+                Get some <a href="/help">help</a>
+                </h6>
+            </div>
+        </div> 
+    </body>
+</html>
