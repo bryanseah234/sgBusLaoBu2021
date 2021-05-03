@@ -1,4 +1,4 @@
-# GingerBread ChessGame
+# SG BusLaoBu
 A repository for a bus app in Python (Capstone Project)
 
 ## Disclaimer:
