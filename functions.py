@@ -132,7 +132,9 @@ class BusStops:
                         "Distance": distance,
                         "Description": busstop['Description'],
                         "ServiceNo": busstop['ServiceNo'],
-                        "Direction": busstop['Direction']
+                        "Direction": busstop['Direction'],
+                        "BusStopLat": busstoplat,
+                        "BusStopLon": busstoplon
                     }
                     
                     allbusstops.append(d)

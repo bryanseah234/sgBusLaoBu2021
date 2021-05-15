@@ -53,7 +53,6 @@ gas = companies.countcategories(gas_categories)
 # json_2_db('json/bus_stops.json', 'database/main.db', commands["createbusstopstable"], commands["insertbusstops"])
 
 '''Start of Flask WebApp'''
-# googlemapskey = os.environ['GOOGLEMAPS']
 app = Flask(__name__, template_folder='templates')
 GoogleMaps(app, key="AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU")
 
@@ -96,13 +95,13 @@ def learnbusfacts():
 def findabus():
 
     mymap = Map(
-            identifier="view-side",
-            varname="mymap",
-            style="height:720px;width:1100px;margin:0;", # hardcoded!
-            lat=37.4419, # hardcoded!
-            lng=-122.1419, # hardcoded!
-            zoom=15,
-            markers=[(37.4419, -122.1419)])
+                identifier="view-side",
+                varname="mymap",
+                style="height:720px;width:1100px;margin:0;", # hardcoded!
+                lat=37.4419, # hardcoded!
+                lng=-122.1419, # hardcoded!
+                zoom=15,
+                markers=[(37.4419, -122.1419)])
 
     if request.method == "POST":
         print(request.form)
@@ -146,7 +145,9 @@ def findabus():
                             "busstopcode": busstopcode,
                             "busservice": serviceno,
                             "numberofstops": numberofstops,
-                            "alight_busstopdescription": mrtbusstop['Description'].title()
+                            "alight_busstopdescription": mrtbusstop['Description'].title(),
+                            "busstoplat": busstop['BusStopLat'],
+                            "busstoplon": busstop['BusStopLon']
                         }
                         data.append(dic)
                         

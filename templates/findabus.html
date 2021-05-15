@@ -21,89 +21,82 @@
         <!-- Scripts -->
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
         <script>
-        var slider = document.getElementById("slider");
-        var output = document.getElementById("radius");
-        output.innerHTML = slider.value;
-        slider.oninput = function() {
-            output.innerHTML = this.value;
-        }
-        </script>
-
-        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css"/>  
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-        <script>
-            $(document).ready( function () {
-                $('#table_id').DataTable({
-
-                    autoWidth: true,
-                    info: false,
-                    searching: false,
-                    paging: true,
-                    scrollCollapse: true,
-                    scrollX: false,
-                    pagingType: "numbers",
-                    lengthChange: true
-                });
-
-            } );
-        </script> -->
-
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU&callback=initMap">
-        </script>
-        <script>
-
-
-            function initMap() {
-
-                var locations = [
-                    ['Bondi Beach', -33.890542, 151.274856, 4],
-                    ['Coogee Beach', -33.923036, 151.259052, 5],
-                    ['Cronulla Beach', -34.028249, 151.157507, 3],
-                    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-                    ['Maroubra Beach', -33.950198, 151.259302, 1]
-                    ];
-
-                const myLatLng = { lat: -25.363, lng: 131.044 };
-                const bus = {lat: -34.397, lng: 150.644};
-
-                const map = new google.maps.Map(document.getElementById("map"), 
-                {
-                    zoom: 15,
-                    center: myLatLng,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                });
-
-                var infowindow = new google.maps.InfoWindow();
-
-                new google.maps.Marker(
-                    {
-                    icon: 'https://maps.gstatic.com/mapfiles/transit/iw2/6/bus.png',
-                    position: bus,
-                    map,
-                    title: "<b>busss</b>"
-                    });
-
-                var marker, i;
-
-                for (i = 0; i < locations.length; i++) {  
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                    map: map,
-                    icon: 'https://maps.gstatic.com/mapfiles/transit/iw2/6/bus.png'
-                });
-
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                    return function() {
-                    infowindow.setContent(locations[i][0]);
-                    infowindow.open(map, marker);
-                    }
-                })(marker, i));
-                }
+            var slider = document.getElementById("slider");
+            var output = document.getElementById("radius");
+            output.innerHTML = slider.value;
+            slider.oninput = function() {
+                output.innerHTML = this.value;
             }
+        </script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU&callback=initMap&libraries=&v=weekly"
+        async></script>
+        <script>
+            function initMap() {
+                const myLatLng = { lat: {{ userlat }}, lng: {{ userlon }} };
+                const busicon = {
+                        url: "../static/bus.png",
+                        size: new google.maps.Size(20, 20),
+                    };
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 16,
+                    center: myLatLng,
+                    scaleControl: false,
+                    mapTypeControl: false,
+                    });
+                var transitLayer = new google.maps.TransitLayer();
+                transitLayer.setMap(map);
+                
+                new google.maps.Marker({
+                    position: myLatLng,
+                    map,
+                    title: "You",
+                    optimized: true,
+                });
+                const styles = {
+                    default: [],
+                    hide: [
+                        {
+                        featureType: "poi.business",
+                        stylers: [{ visibility: "off" }],
+                        },
+                        {
+                        featureType: "administrative.locality",
+                        stylers: [{ visibility: "off" }],
+                        },
+                        {
+                        featureType: "poi.park",
+                        stylers: [{ visibility: "off" }],
+                        },
+                        // {
+                        // featureType: "landscape.natural",
+                        // stylers: [{ visibility: "off" }],
+                        // },
+                        {
+                        featureType: "water",
+                        stylers: [{ visibility: "off" }],
+                        },
+                    ],
+                };
+                map.setOptions({ styles: styles["hide"] });
 
+                console.log(jsondata)
+                // for (let i = 0; i < {{ data }}.length; i++) {
+                //     const busstop = {{ data }}[i];
+                //     console.log(busstop)
+                //     new google.maps.Marker({
+                //         position: { lat: busstop['busstoplat'], lng: busstop['busstoplon'] },
+                //         map,
+                //         icon: busicon,
+                //         title: busstop["board_busstopdescription"],
+                //         optimized: true,
+                //         zIndex: 1,
+                //     });
+                // }
 
+            }
+            
         </script>
         <!-- Styling -->
         <style>
@@ -164,7 +157,7 @@
 
     </head>
 
-    <body onload='initMap()'>
+    <body>
 
         <div class = "container-fluid">
             <h2>Laobu Bus Finder 🚏</h2>
@@ -188,10 +181,7 @@
             </form>
         </div>
 
-        <div id='map' class="container">
-            <div id="map" style="width:500px; height:400px;"></div>
-            {{ mymap }}
-        </div>
+        <div id="map"></div>
         
         <div class = "table">
             <table class="sortable">
@@ -252,5 +242,6 @@
                 </h6>
             </div>
         </div> 
+
     </body>
 </html>
