@@ -11,7 +11,7 @@ from flask import *
 from copy import copy
 from werkzeug.utils import secure_filename
 
-from functions import json_2_db, coordinates_2_txt, quickSort, haversine, BusStops, BusCompanies
+from functions import json_2_db, coordinates_2_txt, quickSort, haversine, BusStops, BusCompanies, export_json, import_json
 from sqlcommands import commands
 
 from flask_googlemaps import get_address, get_coordinates, GoogleMaps, Map
@@ -100,8 +100,7 @@ def findabus():
                 style="height:720px;width:1100px;margin:0;", # hardcoded!
                 lat=37.4419, # hardcoded!
                 lng=-122.1419, # hardcoded!
-                zoom=15,
-                markers=[(37.4419, -122.1419)])
+                zoom=15)
 
     if request.method == "POST":
         print(request.form)
@@ -116,7 +115,13 @@ def findabus():
         except:
             return render_template('getyourlocation.html')
         else:
+            
+            d = { "lat":float(userlat), "lng":float(userlon) }
+            jlis = import_json()
+            jlis.append(d)
+            export_json(jlis)
             coordinates_2_txt(userlon,userlat)
+
             allbusstops = stops.getbusstopdistance(commands["selectfromdatabase"], userlat=userlat, userlon=userlon, radius=radius)
 
             for busstop in allbusstops:
@@ -164,9 +169,14 @@ def findabus():
 def help():
     return render_template('help.html')
 
+
 @app.route('/coordinates', methods=['GET'])
 def coordinates():
-    return render_template('coordinates.html')
+    with open('txt/coordinates.txt', 'r') as f:
+        data = f.readlines()
+        data.pop(0)
+    return render_template('coordinates.html', data=data)
+
 
 if __name__ == '__main__':
     app.run("0.0.0.0")

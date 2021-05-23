@@ -11,7 +11,18 @@ def coordinates_2_txt(userlon=None, userlat=None):
     with open("txt/coordinates.txt", 'a') as f:
         coordinates = f"({str(userlon)}, {str(userlat)})"
         f.write(coordinates)
-        f.write("\n")  
+        f.write("\n")
+
+def export_json(data):
+    if type(data) != list:
+        print('please input data as a list of dictionaries')
+    elif type(data) == list:
+        with open('static/coordinates.json', 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+
+def import_json():
+    with open('static/coordinates.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 def json_2_db(jsonfile=None, dbfile=None, create=None, insert=None):
     '''
@@ -269,6 +280,8 @@ class BusCompanies():
 if __name__ == "__main__":
     json_2_db()
     coordinates_2_txt()
+    export_json()
+    import_json()
     BusStops()
     BusCompanies()
     quickSort()
