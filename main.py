@@ -164,13 +164,9 @@ def findabus():
 def help():
     return render_template('help.html')
 
-# @app.route('/upload', methods=['POST','GET'])
-# def upload():
-
-# @app.route('/frame', methods=['POST','GET'])
-# def frame():
-#     return render_template('frame.html')
-#     return redirect(url_for('upload'))
+@app.route('/coordinates', methods=['GET'])
+def coordinates():
+    return render_template('coordinates.html')
 
 if __name__ == '__main__':
     app.run("0.0.0.0")
