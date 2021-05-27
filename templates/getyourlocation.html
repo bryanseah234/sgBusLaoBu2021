@@ -20,6 +20,7 @@
         <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
         <!-- BG Audio -->
         <script>
             window.addEventListener('load', () => {
@@ -132,7 +133,7 @@
             <form id='form2' action='/findabus' method='POST'>
 
                 <div class='slidecontainer'>
-                    <label for="Slider"><h4>Searching buses within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="2.5" value="0.2" step="0.1" class="slider" id="slider" name='slider'>
+                    <label for="Slider"><h4>Searching buses within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="0.9" value="{{ ra }}" step="0.1" class="slider" id="slider" name='slider'>
                 </div>
                 
                 <label for="Longitude"><h5>Longtitude:</h5><input type="text" name="longitude" id="getlon"></label> 
@@ -227,15 +228,11 @@
 
         function showPosition(position, callback) {
             callback = onlyAllowOneCall(callback)
-
-
             console.log(position);
             document.frm1.getlat1.value = position.coords.latitude;
             document.frm1.getlon1.value = position.coords.longitude;
             slider = document.getElementById('slider');
-            // slider.oninput = function() {
-            //     document.frm1.getslider.value = this.value;
-            // }
+            console.log(slider.value)
             document.frm1.getslider.value = slider.value;
             document.frm1.submit();
 
@@ -246,11 +243,11 @@
 
             // var coordinates = lon+','+lat;
             // console.log(coordinates)
-            const URL = '/findabus'
-            const xhr = new XMLHttpRequest();
-            sender = JSON.stringify(coordinates)
-            xhr.open('POST', URL);
-            xhr.send(sender);
+            // const URL = '/findabus'
+            // const xhr = new XMLHttpRequest();
+            // sender = JSON.stringify(coordinates)
+            // xhr.open('POST', URL);
+            // xhr.send(sender);
         }
 
         function positionError(error) {
