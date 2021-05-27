@@ -17,20 +17,13 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
         <!-- BG Audio -->
         <audio autoplay="autoplay" hidden="hidden" loop="true">
             <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
         </audio>
         <!-- Scripts -->
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-        <script>
-            var slider = document.getElementById("slider");
-            var output = document.getElementById("radius");
-            output.innerHTML = slider.value;
-            slider.oninput = function() {
-                output.innerHTML = this.value;
-            }
-        </script>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU&callback=initMap&libraries=&v=weekly"
@@ -83,8 +76,6 @@
                     ],
                 };
                 map.setOptions({ styles: styles["hide"] });
-
-                console.log(jsondata)
             }
         </script>
         <!-- Styling -->
@@ -95,19 +86,20 @@
                 margin-top: 60px;
                 margin-bottom: auto;
             }
+
             #form1{
                 max-width: 400px;
                 margin-left: auto;
                 margin-right: auto;
             }
             #form2{
-                max-width: 230px;
+                max-width: 600px;
                 margin-left: auto;
                 margin-right: auto;
                 padding: 13px;
             }
             #button{
-                max-width: auto;
+                max-width: 230px;
                 text-align: center;
                 margin-left: auto;
                 margin-right: auto;
@@ -155,7 +147,7 @@
                 {% if userlat and userlon and radius is not none %}
                 Latitude: {{ userlat }}<br>
                 Longitude: {{ userlon }}<br>
-                LaoBu searched for buses within {{ radius }}km
+                LaoBu searched for buses within {{ ra }}km
                 {% elif userlat or userlon or radius is none %}
                 Latitude: Cannot be determined<br>
                 Longitude: Cannot be determined<br>
@@ -165,8 +157,13 @@
             <h4>
                 Information displayed are inaccurate? Don't worry!<br>Click the button below to fetch your new coordinates.
             </h4>
-            <form id='form2' action='/getyourlocation' method='GET'>
-                <button id='button' type="submit" class="btn btn-primary btn-block btn-large">Get New Location</button>
+            
+            <form id='form2' action='/getyourlocation' method='POST'>
+                <div class='slidecontainer'>
+                    <label for="Slider"><h4>Search for bus again within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="0.9" value="0.2" step="0.1" class="slider" id="slider" name='slider'>
+                </div>
+                
+                <button id='button' onclick="sendSlider()" class="btn btn-primary btn-block btn-large">Get New Location</button>
             </form>
         </div>
 
@@ -233,4 +230,26 @@
         </div> 
 
     </body>
+    <!-- Scripts -->
+    <script>
+        var slider = document.getElementById("slider");
+        var output = document.getElementById("radius");
+        output.innerHTML = slider.value;
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+
+        function sendSlider() {
+
+            slider = document.getElementById('slider').value;
+            console.log(slider)
+
+            document.form2.submit();
+            // const URL = '/getyourlocation'
+            // const xhr = new XMLHttpRequest();
+            // sender = JSON.stringify(slider)
+            // xhr.open('POST', URL);
+            // xhr.send(sender);
+        }
+    </script>
 </html>

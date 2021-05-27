@@ -81,9 +81,18 @@ def home():
     return render_template('laobu.html')
 
 
-@app.route('/getyourlocation', methods=['GET'])
+@app.route('/getyourlocation', methods=['POST','GET'])
 def getyourlocation():
-    return render_template('getyourlocation.html')
+    if request.method == "POST":
+        if request.form.get("slider") is not None:
+            ra = request.form.get("slider") #type: string
+            return render_template('getyourlocation.html', ra=ra)
+        else:
+            ra = '0.2'
+            return render_template('getyourlocation.html', ra=ra)
+    else:
+        ra = '0.2'
+        return render_template('getyourlocation.html', ra=ra)
 
 
 @app.route('/learnbusfacts', methods=['GET'])
@@ -112,12 +121,13 @@ def findabus():
         else:
             userlon = request.form.get("longitude") #type: string
             userlat = request.form.get("latitude") #type: string
-        radius = request.form.get("slider") #type: string
+        ra = request.form.get("slider") #type: string
 
         try:
-            radius, userlon, userlat = float(radius), float(userlon), float(userlat)
+            ra, userlon, userlat = float(ra), float(userlon), float(userlat)
         except:
-            return render_template('getyourlocation.html')
+            ra = '0.2'
+            return render_template('getyourlocation.html', ra=ra)
         else:
             
             d = { "lat":float(userlat), "lng":float(userlon) }
@@ -126,7 +136,7 @@ def findabus():
             export_json(jlis)
             coordinates_2_txt(userlon,userlat)
 
-            allbusstops = stops.getbusstopdistance(commands["selectfromdatabase"], userlat=userlat, userlon=userlon, radius=radius)
+            allbusstops = stops.getbusstopdistance(commands["selectfromdatabase"], userlat=userlat, userlon=userlon, radius=ra)
 
             for busstop in allbusstops:
                 for mrtbusstop in allmrtbusstops:
@@ -162,7 +172,7 @@ def findabus():
                         
                     else:
                         pass
-            return render_template('findabus.html', userlon = userlon, userlat = userlat, data=data, jsondata=json.loads(json.dumps(data)), mymap=mymap, radius=radius)
+            return render_template('findabus.html', userlon = userlon, userlat = userlat, data=data, mymap=mymap, ra=ra)
            
 
     else:
