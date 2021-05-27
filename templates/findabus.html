@@ -18,7 +18,9 @@
         <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'/>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
         <!-- BG Audio -->
-        <embed src="{{ url_for('static', filename='wheels.mp3') }}" width="5" height="5"" loop="true" autostart="true" hidden="true"/>
+        <embed src="{{ url_for('static', filename='wheels.mp3') }}" width="5"         <audio autoplay="autoplay" hidden="hidden" loop="true">
+            <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
+        </audio>
         <!-- Scripts -->
         <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
         <script>

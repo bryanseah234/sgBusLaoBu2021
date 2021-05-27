@@ -34,8 +34,10 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="manifest" href="manifest.webmanifest">
         <!-- BG Audio -->
-        <embed src="{{ url_for('static', filename='wheels.mp3') }}" width="5" height="5"" loop="true" autostart="true" hidden="true"/>
-
+        <audio autoplay="autoplay" hidden="hidden" loop="true">
+            <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
+        </audio>
+        <!-- Styling -->
         <style>
             .container-fluid {
                 color: white;
