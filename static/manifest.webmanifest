@@ -1,0 +1,15 @@
+{
+  "background_color": "blue",
+  "description": "Laobu wants to helps you quickly find a bus service to the nearest train station.",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "static/bus.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "Bus LaoBu 🚌",
+  "short_name": "Bus LaoBu 🚌",
+  "start_url": "/templates/laobu.html"
+}

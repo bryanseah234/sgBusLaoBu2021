@@ -12,6 +12,7 @@
         <!-- Favicon -->
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}">
         <!-- CSS -->
+        <link rel="manifest" href="manifest.webmanifest">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
@@ -20,7 +21,7 @@
         <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <!-- BG Audio -->
-        <embed src="/static/wheels.mp3" width="5" height="5" loop="true" autostart="true" hidden="true"/>
+        <embed src="{{ url_for('static', filename='wheels.mp3') }}" width="5" height="5"" loop="true" autostart="true" hidden="true"/>
 
         <style>
             .container-fluid {
