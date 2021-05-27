@@ -105,9 +105,13 @@ def findabus():
     if request.method == "POST":
         print(request.form)
         data = []
-
-        userlon = request.form.get("longitude") #type: string
-        userlat = request.form.get("latitude") #type: string
+        
+        if request.form.get("longitude1") and request.form.get("latitude1") is not None:
+            userlon = request.form.get("longitude1") #type: string
+            userlat = request.form.get("latitude1") #type: string
+        else:
+            userlon = request.form.get("longitude") #type: string
+            userlat = request.form.get("latitude") #type: string
         radius = request.form.get("slider") #type: string
 
         try:
