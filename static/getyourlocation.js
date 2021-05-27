@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    pageLoad();
+    getLocation();
 });
 
 function onlyAllowOneCall(fn){
@@ -51,8 +51,4 @@ function positionError(error) {
     if (error.PERMISSION_DENIED) alert('Please let Laobu get your location');
     hideLoadingDiv();
     showError('Laobu could not determine your location :(, Laobu needs you to refresh the page and click "allow"');
-}
-
-function pageLoad() {
-    getLocation();
 }
