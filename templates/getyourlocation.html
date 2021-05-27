@@ -21,9 +21,30 @@
         <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <!-- BG Audio -->
-        <audio autoplay="autoplay" hidden="hidden" loop="true">
-            <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
-        </audio>
+        <script>
+            window.addEventListener('load', () => {
+				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', 'static/wheels.mp3');
+				xhr.responseType = 'arraybuffer';
+				xhr.addEventListener('load', () => {
+					let playsound = (audioBuffer) => {
+						let source = audioCtx.createBufferSource();
+						source.buffer = audioBuffer;
+						source.connect(audioCtx.destination);
+						source.loop = false;
+						source.start();
+
+						setTimeout(function () {
+							playsound(audioBuffer);
+						}, 1000 + 52*2500);
+					};
+
+					audioCtx.decodeAudioData(xhr.response).then(playsound);
+				});
+				xhr.send();
+			});
+        </script>
         <!-- Styling -->
         <style>
             .container-fluid {
@@ -101,14 +122,12 @@
 
     </head>
 
-
-
     <body>
 
         <div class = "container-fluid">
             <h2>Laobu Bus Finder 🚏</h2>
-            <h4>Hello there! Laobu needs your location for this to work.<br>Click on "allow location access" or input a coordinate<br>to get started!</h4>
-
+            <h4>Hello there! Laobu needs your location for this to work.<br>Click on "allow location access" or input a coordinate<br>to get started! <p id='status'><p></h4>
+            
             <!-- version2 -->
             <form id='form2' action='/findabus' method='POST'>
 
@@ -116,21 +135,16 @@
                     <label for="Slider"><h4>Searching buses within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="2.5" value="0.2" step="0.1" class="slider" id="slider" name='slider'>
                 </div>
                 
-                <label for="Longitude"><h5>Longtitude:</h5><input type="text" name="longitude" id="getlon" /></label> 
-
-                <label for="Latitude"><h5>Latitude:</h5></label><input type="text" name="latitude" id="getlat" /></label>
-
+                <label for="Longitude"><h5>Longtitude:</h5><input type="text" name="longitude" id="getlon"></label> 
+                <label for="Latitude"><h5>Latitude:</h5></label><input type="text" name="latitude" id="getlat"></label>
+                <button id='button' onclick="geoFindMe()" type="button" class="btn btn-primary btn-block btn-large">Get Location</button>
                 <button id='button' type="submit" class="btn btn-primary btn-block btn-large">Find Bus</button>
-            </form>
-
-            <form id='form2' action='/getyourlocation' method='GET'>
-                <button id='button' type="submit" class="btn btn-primary btn-block btn-large">Refresh</button>
             </form>
 
             <form id='form2' action="/findabus" name="frm1" method="POST">
                 <input type="hidden" id="getslider" name='slider'>
-                <input type="hidden" id="getlon" name="longitude" />
-                <input type="hidden" id="getlat" name="latitude" />
+                <input type="hidden" id="getlon1" name="longitude1">
+                <input type="hidden" id="getlat1" name="latitude1">
             </form>
         </div>
 
@@ -151,14 +165,44 @@
     <!-- Scripts -->
     <script src="static/getyourlocation.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>      
-    
+
     <script>
-    var slider = document.getElementById("slider");
-    var output = document.getElementById("radius");
-    output.innerHTML = slider.value;
-    slider.oninput = function() {
-        output.innerHTML = this.value;
-    }
+        var slider = document.getElementById("slider");
+        var output = document.getElementById("radius");
+        output.innerHTML = slider.value;
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+
+        function geoFindMe() {
+
+            const status = document.querySelector('#status');
+            const latitudetext = document.querySelector('#getlat1');
+            const longtitudetext = document.querySelector('#getlon1');
+
+            latitudetext.value = ""
+            longtitudetext.value = ""
+
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                status.textContent = '';
+                latitudetext.value = `${latitude}`;
+                longitudetext.value = `${longitude}`;
+            }
+
+            function error() {
+                status.textContent = 'Status: Laobu is unable to retrieve your location.';
+            }
+
+            if (!navigator.geolocation) {
+                status.textContent = 'Status: Laobu thinks your browser does not support geolocation.';
+            } else {
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+
+        }
+        window.onload = geoFindMe();
     </script>
 
 

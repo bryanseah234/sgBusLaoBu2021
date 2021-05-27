@@ -24,8 +24,8 @@ function showPosition(position, callback) {
 
 
     console.log(position);
-    document.frm1.getlat.value = position.coords.latitude;
-    document.frm1.getlon.value = position.coords.longitude;
+    document.frm1.getlat1.value = position.coords.latitude;
+    document.frm1.getlon1.value = position.coords.longitude;
     slider = document.getElementById('slider');
     // slider.oninput = function() {
     //     document.frm1.getslider.value = this.value;
@@ -34,8 +34,8 @@ function showPosition(position, callback) {
     document.frm1.submit();
 
 
-    longitude = document.getElementById('getlon').value;
-    latitude = document.getElementById('getlat').value;
+    longitude = document.getElementById('getlon1').value;
+    latitude = document.getElementById('getlat1').value;
     slider = document.getElementById('getslider').value;
 
     // var coordinates = lon+','+lat;
@@ -48,7 +48,7 @@ function showPosition(position, callback) {
 }
 
 function positionError(error) {
-    if (error.PERMISSION_DENIED) alert('please let Laobu get your location');
+    if (error.PERMISSION_DENIED) alert('Please let Laobu get your location');
     hideLoadingDiv();
     showError('Laobu could not determine your location :(, Laobu needs you to refresh the page and click "allow"');
 }

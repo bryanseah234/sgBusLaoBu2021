@@ -34,9 +34,30 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="manifest" href="manifest.webmanifest">
         <!-- BG Audio -->
-        <audio autoplay="autoplay" hidden="hidden" loop="true">
-            <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
-        </audio>
+        <script>
+            window.addEventListener('load', () => {
+				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', 'static/wheels.mp3');
+				xhr.responseType = 'arraybuffer';
+				xhr.addEventListener('load', () => {
+					let playsound = (audioBuffer) => {
+						let source = audioCtx.createBufferSource();
+						source.buffer = audioBuffer;
+						source.connect(audioCtx.destination);
+						source.loop = false;
+						source.start();
+
+						setTimeout(function () {
+							playsound(audioBuffer);
+						}, 1000 + 52*2500);
+					};
+
+					audioCtx.decodeAudioData(xhr.response).then(playsound);
+				});
+				xhr.send();
+			});
+        </script>
         <!-- Styling -->
         <style>
             .container-fluid {
