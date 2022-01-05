@@ -1,5 +1,4 @@
 import json
-import time
 import csv
 import sqlite3
 from math import radians, cos, sin, asin, sqrt
@@ -16,7 +15,7 @@ def coordinates_2_txt(userlon=None, userlat=None):
 def export_json(data):
     if type(data) != list:
         print('please input data as a list of dictionaries')
-    elif type(data) == list:
+    elif type(data) is list:
         with open('static/coordinates.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
@@ -99,7 +98,8 @@ class BusStops:
     def __init__(self):
         pass
 
-    def description_2_mrtname(self, description=None):
+    @staticmethod
+    def description_2_mrtname(description=None):
         '''
         input description of mrt bus stop, returns mrt station and mrt line
         '''
@@ -117,7 +117,8 @@ class BusStops:
                 else:
                     pass
 
-    def getbusstopdistance(self, command=None,userlon=None,userlat=None,radius=None):
+    @staticmethod
+    def getbusstopdistance(command=None,userlon=None,userlat=None,radius=None):
         '''
         calculates the distance between each bus stop and user location, returns all bus stops within specified distance (in km) 
         '''
@@ -155,7 +156,8 @@ class BusStops:
             con.close()
             return allbusstops
 
-    def getmrtbusstops(self, command=None):
+    @staticmethod
+    def getmrtbusstops(command=None):
         '''
         find and returns all bus stops outside an mrt station
         '''
@@ -187,7 +189,8 @@ class BusStops:
             con.close()
             return allmrtbusstops
 
-    def findstopsequence(self,command=None,serviceno=None,direction=None,busstopcode=None):
+    @staticmethod
+    def findstopsequence(command=None,serviceno=None,direction=None,busstopcode=None):
         '''
         returns the bus stop number of a bus service in its route given its direction
         '''
@@ -208,21 +211,22 @@ class BusCompanies():
         '''
         opens and reads json file and stores the data in a variable
         '''
-        if filename == None:
+        if filename is None:
             print('Please input filename as a string')
-        elif type(filename) == str:
+        elif type(filename) is str:
             with open (filename, 'r', encoding = "utf-8") as f:
                 data = json.load(f)
         else:
             print('Please input filename as a string')
 
-    def getbusservices(self, company=None):
+    @staticmethod
+    def getbusservices(company=None):
         '''
         returns a list of bus services a company operates
         '''
-        if company == None:
+        if company is None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             services = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -235,13 +239,14 @@ class BusCompanies():
         else:
             print('Please input a bus company name as a string')
 
-    def getcategories(self, company=None):
+    @staticmethod
+    def getcategories(company=None):
         '''
         returns a list of bus categories which company operates
         '''
-        if company == None:
+        if company is None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             categories = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -254,13 +259,15 @@ class BusCompanies():
         else:
             print('Please input a bus company name as a string')
 
-    def countcategories(self, categories=None):
+    @staticmethod
+    def countcategories(categories=None):
+
         '''
         count and return the number of each category of bus a company operates
         '''
-        if categories == None:
+        if categories is None:
             print('Please input category as a list')
-        elif type(categories) == list:
+        elif type(categories) is list:
             counted = {
                 "Trunk": categories.count("TRUNK"),
                 "Express": categories.count("EXPRESS"),

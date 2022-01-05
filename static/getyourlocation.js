@@ -23,7 +23,7 @@ function showPosition(position, callback) {
     callback = onlyAllowOneCall(callback)
 
 
-    console.log(position);
+    
     document.frm1.getlat1.value = position.coords.latitude;
     document.frm1.getlon1.value = position.coords.longitude;
     slider = document.getElementById('slider');
