@@ -1,20 +1,9 @@
-import os
-import sys
-import glob
-import shutil
-import sqlite3
-import json
-import time
-import csv
-from shutil import Error
 from flask import *
-from copy import copy
-from werkzeug.utils import secure_filename
 
-from functions import json_2_db, coordinates_2_txt, quickSort, haversine, BusStops, BusCompanies, export_json, import_json
+from functions import coordinates_2_txt, BusStops, BusCompanies, export_json, import_json
 from sqlcommands import commands
 
-from flask_googlemaps import get_address, get_coordinates, GoogleMaps, Map
+from flask_googlemaps import GoogleMaps, Map
 
 #-------------------------------------
 
