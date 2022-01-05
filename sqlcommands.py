@@ -21,13 +21,13 @@ commands = {
                 FOREIGN KEY(ServiceNo) REFERENCES Bus_Services(ServiceNo)
             )
         ''', 
-    
+
     "insertbusroutes" : '''
     INSERT INTO Bus_Routes
     (ServiceNo , Direction , StopSequence , BusStopCode , WD_FirstBus , WD_LastBus , SAT_FirstBus , SAT_LastBus , SUN_FirstBus , SUN_LastBus)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', 
-    
+
     "createbusservicestable" : '''
     CREATE TABLE IF NOT EXISTS Bus_Services
     (
@@ -40,13 +40,13 @@ commands = {
         PRIMARY KEY (ServiceNo,Direction)
     )
     ''', 
-    
+
     "insertbusservices" : '''
     INSERT INTO Bus_Services
     (ServiceNo , Direction , AM_Peak_Freq , AM_Offpeak_Freq , PM_Peak_Freq , PM_Offpeak_Freq)
     VALUES (?, ?, ?, ?, ?, ?)
     ''' , 
-    
+
     "createbusstopstable" : '''
     CREATE TABLE IF NOT EXISTS Bus_Stops
     (
@@ -57,7 +57,7 @@ commands = {
         PRIMARY KEY (BusStopCode)
     )
     ''' , 
-    
+
     "insertbusstops" : '''
     INSERT INTO Bus_Stops
     (BusStopCode , Description , Latitude , Longitude)

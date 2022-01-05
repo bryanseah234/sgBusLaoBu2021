@@ -16,7 +16,7 @@ def coordinates_2_txt(userlon=None, userlat=None):
 def export_json(data):
     if type(data) != list:
         print('please input data as a list of dictionaries')
-    elif type(data) == list:
+    elif type(data) is list:
         with open('static/coordinates.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
@@ -37,7 +37,7 @@ def json_2_db(jsonfile=None, dbfile=None, create=None, insert=None):
 
         con = sqlite3.connect(dbfile)
         c = con.cursor()
-        
+
         c.execute(create)
 
         # insertinto Bus Routes table
@@ -136,7 +136,7 @@ class BusStops:
             for busstop in rows:
                 busstoplon = busstop['Longitude']
                 busstoplat = busstop['Latitude']
-                
+
                 distance = haversine(lat1=userlat, lon1=userlon, lat2=busstoplat, lon2=busstoplon) #in kilometers
                 if distance <= radius:
 
@@ -149,7 +149,7 @@ class BusStops:
                         "BusStopLat": busstoplat,
                         "BusStopLon": busstoplon
                     }
-                    
+
                     allbusstops.append(d)
                 else:
                     pass
@@ -214,7 +214,7 @@ class BusCompanies():
         '''
         if filename == None:
             print('Please input filename as a string')
-        elif type(filename) == str:
+        elif type(filename) is str:
             with open (filename, 'r', encoding = "utf-8") as f:
                 data = json.load(f)
         else:
@@ -227,7 +227,7 @@ class BusCompanies():
         '''
         if company == None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             services = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -247,7 +247,7 @@ class BusCompanies():
         '''
         if company == None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             categories = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -259,6 +259,7 @@ class BusCompanies():
             return categories
         else:
             print('Please input a bus company name as a string')
+
     
     @staticmethod
     def countcategories(categories=None):
@@ -267,7 +268,7 @@ class BusCompanies():
         '''
         if categories == None:
             print('Please input category as a list')
-        elif type(categories) == list:
+        elif type(categories) is list:
             counted = {
                 "Trunk": categories.count("TRUNK"),
                 "Express": categories.count("EXPRESS"),
