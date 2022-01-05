@@ -211,7 +211,7 @@ class BusCompanies():
         '''
         opens and reads json file and stores the data in a variable
         '''
-        if filename == None:
+        if filename is None:
             print('Please input filename as a string')
         elif type(filename) is str:
             with open (filename, 'r', encoding = "utf-8") as f:
@@ -224,7 +224,7 @@ class BusCompanies():
         '''
         returns a list of bus services a company operates
         '''
-        if company == None:
+        if company is None:
             print('Please input a bus company name as a string')
         elif type(company) is str:
             services = []
@@ -244,7 +244,7 @@ class BusCompanies():
         '''
         returns a list of bus categories which company operates
         '''
-        if company == None:
+        if company is None:
             print('Please input a bus company name as a string')
         elif type(company) is str:
             categories = []
@@ -265,7 +265,7 @@ class BusCompanies():
         '''
         count and return the number of each category of bus a company operates
         '''
-        if categories == None:
+        if categories is None:
             print('Please input category as a list')
         elif type(categories) is list:
             counted = {
