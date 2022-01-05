@@ -99,7 +99,8 @@ class BusStops:
     def __init__(self):
         pass
 
-    def description_2_mrtname(self, description=None):
+    @staticmethod
+    def description_2_mrtname(description=None):
         '''
         input description of mrt bus stop, returns mrt station and mrt line
         '''
@@ -117,7 +118,8 @@ class BusStops:
                 else:
                     pass
 
-    def getbusstopdistance(self, command=None,userlon=None,userlat=None,radius=None):
+    @staticmethod
+    def getbusstopdistance(command=None,userlon=None,userlat=None,radius=None):
         '''
         calculates the distance between each bus stop and user location, returns all bus stops within specified distance (in km) 
         '''
@@ -155,7 +157,8 @@ class BusStops:
             con.close()
             return allbusstops
 
-    def getmrtbusstops(self, command=None):
+    @staticmethod
+    def getmrtbusstops(command=None):
         '''
         find and returns all bus stops outside an mrt station
         '''
@@ -187,7 +190,8 @@ class BusStops:
             con.close()
             return allmrtbusstops
 
-    def findstopsequence(self,command=None,serviceno=None,direction=None,busstopcode=None):
+    @staticmethod
+    def findstopsequence(command=None,serviceno=None,direction=None,busstopcode=None):
         '''
         returns the bus stop number of a bus service in its route given its direction
         '''
@@ -216,7 +220,8 @@ class BusCompanies():
         else:
             print('Please input filename as a string')
 
-    def getbusservices(self, company=None):
+    @staticmethod
+    def getbusservices(company=None):
         '''
         returns a list of bus services a company operates
         '''
@@ -235,7 +240,8 @@ class BusCompanies():
         else:
             print('Please input a bus company name as a string')
 
-    def getcategories(self, company=None):
+    @staticmethod
+    def getcategories(company=None):
         '''
         returns a list of bus categories which company operates
         '''
@@ -254,7 +260,8 @@ class BusCompanies():
         else:
             print('Please input a bus company name as a string')
     
-    def countcategories(self, categories=None):
+    @staticmethod
+    def countcategories(categories=None):
         '''
         count and return the number of each category of bus a company operates
         '''
