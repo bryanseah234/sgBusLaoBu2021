@@ -114,7 +114,7 @@ def findabus():
     if request.method == "POST":
         print(request.form)
         data = []
-        
+
         if request.form.get("longitude1") and request.form.get("latitude1") is not None:
             userlon = request.form.get("longitude1") #type: string
             userlat = request.form.get("latitude1") #type: string
@@ -129,7 +129,7 @@ def findabus():
             ra = '0.2'
             return render_template('getyourlocation.html', ra=ra)
         else:
-            
+
             d = { "lat":float(userlat), "lng":float(userlon) }
             jlis = import_json()
             jlis.append(d)
@@ -140,7 +140,7 @@ def findabus():
 
             for busstop in allbusstops:
                 for mrtbusstop in allmrtbusstops:
-                    
+
                     if busstop['ServiceNo'] == mrtbusstop['ServiceNo'] and busstop['Direction'] == mrtbusstop['Direction']:
                         mrtstation, mrtline = stops.description_2_mrtname(mrtbusstop['Description'])
 
@@ -169,11 +169,11 @@ def findabus():
                             "busstoplon": busstop['BusStopLon']
                         }
                         data.append(dic)
-                        
+
                     else:
                         pass
             return render_template('findabus.html', userlon = userlon, userlat = userlat, data=data, mymap=mymap, ra=ra)
-           
+
 
     else:
         return render_template('getyourlocation.html')
