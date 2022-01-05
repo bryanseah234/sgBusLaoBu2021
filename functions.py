@@ -1,5 +1,4 @@
 import json
-import time
 import csv
 import sqlite3
 from math import radians, cos, sin, asin, sqrt
