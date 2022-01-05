@@ -76,9 +76,8 @@ def getyourlocation():
         if request.form.get("slider") is not None:
             ra = request.form.get("slider") #type: string
             return render_template('getyourlocation.html', ra=ra)
-        else:
-            ra = '0.2'
-            return render_template('getyourlocation.html', ra=ra)
+        ra = '0.2'
+        return render_template('getyourlocation.html', ra=ra)
     else:
         ra = '0.2'
         return render_template('getyourlocation.html', ra=ra)
