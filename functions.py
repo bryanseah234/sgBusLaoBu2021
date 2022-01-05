@@ -37,7 +37,7 @@ def json_2_db(jsonfile=None, dbfile=None, create=None, insert=None):
 
         con = sqlite3.connect(dbfile)
         c = con.cursor()
-        
+
         c.execute(create)
 
         # insertinto Bus Routes table
@@ -134,7 +134,7 @@ class BusStops:
             for busstop in rows:
                 busstoplon = busstop['Longitude']
                 busstoplat = busstop['Latitude']
-                
+
                 distance = haversine(lat1=userlat, lon1=userlon, lat2=busstoplat, lon2=busstoplon) #in kilometers
                 if distance <= radius:
 
@@ -147,7 +147,7 @@ class BusStops:
                         "BusStopLat": busstoplat,
                         "BusStopLon": busstoplon
                     }
-                    
+
                     allbusstops.append(d)
                 else:
                     pass
@@ -253,7 +253,7 @@ class BusCompanies():
             return categories
         else:
             print('Please input a bus company name as a string')
-    
+
     def countcategories(self, categories=None):
         '''
         count and return the number of each category of bus a company operates
