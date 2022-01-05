@@ -84,13 +84,12 @@ def quickSort(array):
     '''
     if len(array) <= 1:
         return array
-    else:
-        pivot = array[-1]
-        ltearray = [el for el in array[:-1] if el["Distance"] <= pivot['Distance']]
-        gtarray = [el for el in array[:-1] if el['Distance'] > pivot['Distance']]
-        ltearray = quickSort(ltearray)
-        gtarray = quickSort(gtarray)
-        return ltearray + [pivot] + gtarray
+    pivot = array[-1]
+    ltearray = [el for el in array[:-1] if el["Distance"] <= pivot['Distance']]
+    gtarray = [el for el in array[:-1] if el['Distance'] > pivot['Distance']]
+    ltearray = quickSort(ltearray)
+    gtarray = quickSort(gtarray)
+    return ltearray + [pivot] + gtarray
 
 #--------------------------------------
 
@@ -114,8 +113,7 @@ class BusStops:
             for mrt in mrtnames:
                 if description == mrt['mrtbusstopdescription']:
                     return mrt['mrtstation'], mrt['mrtline']
-                else:
-                    pass
+                pass
 
     @staticmethod
     def getbusstopdistance(command=None,userlon=None,userlat=None,radius=None):
