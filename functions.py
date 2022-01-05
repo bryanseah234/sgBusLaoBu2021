@@ -259,9 +259,9 @@ class BusCompanies():
         else:
             print('Please input a bus company name as a string')
 
-    
     @staticmethod
     def countcategories(categories=None):
+
         '''
         count and return the number of each category of bus a company operates
         '''
