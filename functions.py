@@ -16,7 +16,7 @@ def coordinates_2_txt(userlon=None, userlat=None):
 def export_json(data):
     if type(data) != list:
         print('please input data as a list of dictionaries')
-    elif type(data) == list:
+    elif type(data) is list:
         with open('static/coordinates.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
@@ -210,7 +210,7 @@ class BusCompanies():
         '''
         if filename == None:
             print('Please input filename as a string')
-        elif type(filename) == str:
+        elif type(filename) is str:
             with open (filename, 'r', encoding = "utf-8") as f:
                 data = json.load(f)
         else:
@@ -222,7 +222,7 @@ class BusCompanies():
         '''
         if company == None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             services = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -241,7 +241,7 @@ class BusCompanies():
         '''
         if company == None:
             print('Please input a bus company name as a string')
-        elif type(company) == str:
+        elif type(company) is str:
             categories = []
             with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
@@ -260,7 +260,7 @@ class BusCompanies():
         '''
         if categories == None:
             print('Please input category as a list')
-        elif type(categories) == list:
+        elif type(categories) is list:
             counted = {
                 "Trunk": categories.count("TRUNK"),
                 "Express": categories.count("EXPRESS"),
