@@ -7,7 +7,7 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 flask = "^1.1.2"
-werkzeug = "^1.0.1"
+werkzeug = "^3.0.3"
 flask-googlemaps = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
