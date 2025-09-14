@@ -43,7 +43,6 @@ gas = companies.countcategories(gas_categories)
 # json_2_db('json/bus_stops.json', 'database/main.db', commands["createbusstopstable"], commands["insertbusstops"])
 
 '''Start of Flask WebApp'''
-import os
 
 # Get Google Maps API key from environment variable or use a placeholder
 GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE')
