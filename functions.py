@@ -7,21 +7,31 @@ def coordinates_2_txt(userlon=None, userlat=None):
     '''
     stores user's coordiantes into a txt file for easy debugging
     '''
-    with open("txt/coordinates.txt", 'a') as f:
-        coordinates = f"({str(userlon)}, {str(userlat)})"
-        f.write(coordinates)
-        f.write("\n")
+    try:
+        with open("txt/coordinates.txt", 'a') as f:
+            coordinates = f"({str(userlon)}, {str(userlat)})"
+            f.write(coordinates)
+            f.write("\n")
+    except IOError as e:
+        print(f"Error writing to coordinates file: {e}")
 
 def export_json(data):
     if type(data) != list:
         print('please input data as a list of dictionaries')
     elif type(data) is list:
-        with open('static/coordinates.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=4)
+        try:
+            with open('static/coordinates.json', 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4)
+        except IOError as e:
+            print(f"Error writing to JSON file: {e}")
 
 def import_json():
-    with open('static/coordinates.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open('static/coordinates.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (IOError, json.JSONDecodeError) as e:
+        print(f"Error reading JSON file: {e}")
+        return []
 
 def json_2_db(jsonfile=None, dbfile=None, create=None, insert=None):
     '''
@@ -40,20 +50,20 @@ def json_2_db(jsonfile=None, dbfile=None, create=None, insert=None):
         c.execute(create)
 
         # insertinto Bus Routes table
-        if 'Bus_Routes' in self.insert:
+        if 'Bus_Routes' in insert:
             for d in data:
-                c.execute(self.insert, (d['ServiceNo'], d['Direction'], d['StopSequence'], d['BusStopCode'], d['WD_FirstBus'], d['WD_LastBus'], d['SAT_FirstBus'], d['SAT_LastBus'], d['SUN_FirstBus'], d['SUN_LastBus']))
+                c.execute(insert, (d['ServiceNo'], d['Direction'], d['StopSequence'], d['BusStopCode'], d['WD_FirstBus'], d['WD_LastBus'], d['SAT_FirstBus'], d['SAT_LastBus'], d['SUN_FirstBus'], d['SUN_LastBus']))
 
         # insertinto Bus Services table
-        elif 'Bus_Services' in self.insert:
+        elif 'Bus_Services' in insert:
             for d in data:
-                c.execute(self.insert, (d['ServiceNo'], d['Direction'], d['AM_Peak_Freq'], d['AM_Offpeak_Freq'], d['PM_Peak_Freq'], d['PM_Offpeak_Freq']))
+                c.execute(insert, (d['ServiceNo'], d['Direction'], d['AM_Peak_Freq'], d['AM_Offpeak_Freq'], d['PM_Peak_Freq'], d['PM_Offpeak_Freq']))
 
         # insertinto Bus Stops table
-        elif 'Bus_Stops' in self.insert:
+        elif 'Bus_Stops' in insert:
             print('stops')
             for d in data:
-                c.execute(self.insert, (d['BusStopCode'], d['Description'], d['Latitude'], d['Longitude']))
+                c.execute(insert, (d['BusStopCode'], d['Description'], d['Latitude'], d['Longitude']))
 
         con.commit()
         con.close()
@@ -63,20 +73,19 @@ def haversine(lat1,lon1,lat2,lon2):
     Calculates the distance between 2 coordinates
     """
     #validate input
-    if type(lat1) and type(lon1) and type(lat2) and type(lon2) is not float:
+    if not all(isinstance(coord, (int, float)) for coord in [lat1, lon1, lat2, lon2]):
         print('Please input coordinates as float')
+        return None
+    #convert to radians
+    lat1,lon1,lat2,lon2 = map(radians, (lat1,lon1,lat2,lon2))
 
-    else:
-        #convert to radians
-        lat1,lon1,lat2,lon2 = map(radians, (lat1,lon1,lat2,lon2))
-
-        #haversine formula
-        delta_lon = lon2 - lon1
-        delta_lat = lat2 - lat1
-        a = sin(delta_lat/2)**2 + cos(lat1) * cos(lat2) * sin(delta_lon/2)**2
-        c = 2 * asin(sqrt(a)) 
-        r = 6371 # Radius of earth in kilometers. Use 3956 for miles
-        return c * r
+    #haversine formula
+    delta_lon = lon2 - lon1
+    delta_lat = lat2 - lat1
+    a = sin(delta_lat/2)**2 + cos(lat1) * cos(lat2) * sin(delta_lon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
 
 def quickSort(array): 
     '''
