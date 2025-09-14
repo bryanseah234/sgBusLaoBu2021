@@ -16,8 +16,8 @@ commands = {
                 SAT_LastBus INTEGER,
                 SUN_FirstBus INTEGER,
                 SUN_LastBus INTEGER,
-                PRIMARY KEY (ServiceNo,Direction,Stopsequence)
-                FOREIGN KEY(BusStopCode) REFERENCES Bus_Stops(BusStopCode)
+                PRIMARY KEY (ServiceNo,Direction,Stopsequence),
+                FOREIGN KEY(BusStopCode) REFERENCES Bus_Stops(BusStopCode),
                 FOREIGN KEY(ServiceNo) REFERENCES Bus_Services(ServiceNo)
             )
         ''', 
