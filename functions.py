@@ -76,18 +76,16 @@ def haversine(lat1,lon1,lat2,lon2):
     if not all(isinstance(coord, (int, float)) for coord in [lat1, lon1, lat2, lon2]):
         print('Please input coordinates as float')
         return None
+    #convert to radians
+    lat1,lon1,lat2,lon2 = map(radians, (lat1,lon1,lat2,lon2))
 
-    else:
-        #convert to radians
-        lat1,lon1,lat2,lon2 = map(radians, (lat1,lon1,lat2,lon2))
-
-        #haversine formula
-        delta_lon = lon2 - lon1
-        delta_lat = lat2 - lat1
-        a = sin(delta_lat/2)**2 + cos(lat1) * cos(lat2) * sin(delta_lon/2)**2
-        c = 2 * asin(sqrt(a)) 
-        r = 6371 # Radius of earth in kilometers. Use 3956 for miles
-        return c * r
+    #haversine formula
+    delta_lon = lon2 - lon1
+    delta_lat = lat2 - lat1
+    a = sin(delta_lat/2)**2 + cos(lat1) * cos(lat2) * sin(delta_lon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
 
 def quickSort(array): 
     '''
