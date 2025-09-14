@@ -1,4 +1,5 @@
 from flask import *
+import os
 
 from functions import coordinates_2_txt, BusStops, BusCompanies, export_json, import_json
 from sqlcommands import commands
@@ -42,8 +43,13 @@ gas = companies.countcategories(gas_categories)
 # json_2_db('json/bus_stops.json', 'database/main.db', commands["createbusstopstable"], commands["insertbusstops"])
 
 '''Start of Flask WebApp'''
+import os
+
+# Get Google Maps API key from environment variable or use a placeholder
+GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE')
+
 app = Flask(__name__, template_folder='templates')
-GoogleMaps(app, key="AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU")
+GoogleMaps(app, key=GOOGLE_MAPS_API_KEY)
 
 
 @app.after_request
@@ -56,13 +62,8 @@ def add_header(r):
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
     r.headers['Cache-Control'] = 'public, max-age=0'
+    r.cache_control.max_age = 0
     return r
-
-
-@app.after_request
-def add_header(response):
-    response.cache_control.max_age = 0
-    return response
 
 
 @app.route('/', methods=['POST','GET'])
@@ -94,9 +95,9 @@ def findabus():
     mymap = Map(
                 identifier="view-side",
                 varname="mymap",
-                style="height:720px;width:1100px;margin:0;", # hardcoded!
-                lat=37.4419, # hardcoded!
-                lng=-122.1419, # hardcoded!
+                style="height:720px;width:1100px;margin:0;", 
+                lat=1.3521,  # Singapore latitude
+                lng=103.8198,  # Singapore longitude
                 zoom=15)
 
     if request.method == "POST":
@@ -174,10 +175,14 @@ def help():
 
 @app.route('/coordinates', methods=['GET'])
 def coordinates():
-    with open('txt/coordinates.txt', 'r') as f:
-        data = f.readlines()
-        data.pop(0)
-    return render_template('coordinates.html', data=data)
+    try:
+        with open('txt/coordinates.txt', 'r') as f:
+            data = f.readlines()
+            if data:  # Only pop if there's data
+                data.pop(0)
+        return render_template('coordinates.html', data=data)
+    except IOError:
+        return render_template('coordinates.html', data=[])
 
 
 if __name__ == '__main__':
