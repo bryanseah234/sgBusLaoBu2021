@@ -4,9 +4,6 @@ A repository for a bus app in Python (Capstone Project)
 ## Disclaimer:
 1. NONE
 
-## Demo
-https://sg-buslaobu2021.herokuapp.com/
-
 ## Instructions:
 
 1. Download the code as a zip file
