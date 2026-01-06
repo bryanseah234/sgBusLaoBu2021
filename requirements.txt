@@ -24,6 +24,6 @@ qrcode==6.1
 pyzbar==0.1.8
 opencv-python==4.8.1.78
 imutils==0.5.3
-aiohttp==3.12.14
+aiohttp==3.13.3
 aiortc==1.0.0
 flask-googlemaps==0.4.1
