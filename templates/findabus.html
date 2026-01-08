@@ -1,255 +1,159 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv='cache-control' content='no-cache'> 
-        <meta http-equiv='expires' content='0'> 
-        <meta http-equiv='pragma' content='no-cache'> 
-        <title>
-            Bus Laobu 🚌
-        </title>
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}"/>
-        <!-- CSS -->
-        <link rel="manifest" href="manifest.webmanifest">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
-        <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
-        <!-- BG Audio -->
-        <audio autoplay="autoplay" hidden="hidden" loop="true">
-            <source src="{{ url_for('static', filename='wheels.mp3') }}" type="audio/mp3" width="5" height="5">
-        </audio>
-        <!-- Scripts -->
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-        <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCvHi1Jn7gDxjrD1QHRZkPEII3Zy34vgU&callback=initMap&libraries=&v=weekly"
-        async></script>
-        <script>
-            function initMap() {
-                const myLatLng = { lat: {{ userlat }}, lng: {{ userlon }} };
-                const busicon = {
-                        url: "../static/bus.png",
-                        size: new google.maps.Size(20, 20),
-                    };
-                const map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 16,
-                    center: myLatLng,
-                    scaleControl: false,
-                    mapTypeControl: false,
-                    });
-                var transitLayer = new google.maps.TransitLayer();
-                transitLayer.setMap(map);
-                
-                new google.maps.Marker({
-                    position: myLatLng,
-                    map,
-                    title: "You",
-                    optimized: true,
-                });
-                const styles = {
-                    default: [],
-                    hide: [
-                        {
-                        featureType: "poi.business",
-                        stylers: [{ visibility: "off" }],
-                        },
-                        {
-                        featureType: "administrative.locality",
-                        stylers: [{ visibility: "off" }],
-                        },
-                        {
-                        featureType: "poi.park",
-                        stylers: [{ visibility: "off" }],
-                        },
-                        // {
-                        // featureType: "landscape.natural",
-                        // stylers: [{ visibility: "off" }],
-                        // },
-                        {
-                        featureType: "water",
-                        stylers: [{ visibility: "off" }],
-                        },
-                    ],
-                };
-                map.setOptions({ styles: styles["hide"] });
-            }
-        </script>
-        <!-- Styling -->
-        <style>
-            .container-fluid {
-                color: white;
-                text-align: center;
-                margin-top: 60px;
-                margin-bottom: auto;
-            }
+<html lang="en">
 
-            #form1{
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            #form2{
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 13px;
-            }
-            #button{
-                max-width: 230px;
-                text-align: center;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 13px;
-            }
-            table {
-                width: 80%;
-                border: 1px;
-                border-color: white;
-                border-collapse: collapse;
-                padding: 10px
-            }                    
-            h2 {
-                font-size: 60px;
-                font-weight: 500px;
-            }
-            h3 {
-                font-size: 20px;
-                font-weight: 500px;
-            }
-            h4 {
-                font-size: 18px;
-                font-weight: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 10px;
-            }
-            h6 {
-                font-size: 14px;
-                font-weight: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 10px;
-            }
-        </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Results | Bus LaoBu 🚌</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="icon" href="{{ url_for('static', filename='bus.png') }}">
+</head>
 
-    </head>
+<body>
+    <div class="container" style="padding-top: var(--spacing-sm);">
+        <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;" class="gradient-text">
+                🚌 Bus LaoBu
+            </a>
+            <a href="/getyourlocation" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                Back to Search
+            </a>
+        </header>
 
-    <body>
-
-        <div class = "container-fluid">
-            <h2>Laobu Bus Finder 🚏</h2>
-            <h4>
-                You are at:<br>
-                {% if userlat and userlon and radius is not none %}
-                Latitude: {{ userlat }}<br>
-                Longitude: {{ userlon }}<br>
-                LaoBu searched for buses within {{ ra }}km
-                {% elif userlat or userlon or radius is none %}
-                Latitude: Cannot be determined<br>
-                Longitude: Cannot be determined<br>
-                Laobu unable to search for bus within given distance
-                {% endif %}
-            </h4>
-            <h4>
-                Information displayed are inaccurate? Don't worry!<br>Click the button below to fetch your new coordinates.
-            </h4>
-            
-            <form id='form2' action='/getyourlocation' method='POST'>
-                <div class='slidecontainer'>
-                    <label for="Slider"><h4>Search for bus again within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="0.9" value="0.2" step="0.1" class="slider" id="slider" name='slider'>
+        <!-- Location Info -->
+        <div class="glass-card animate-fade-in" style="margin-bottom: var(--spacing-md); padding: var(--spacing-md);">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 class="text-primary">Your Location</h3>
+                    <p class="text-muted" style="font-size: 0.9rem;">
+                        {{ userlat }}, {{ userlon }} (Radius: {{ ra }}km)
+                    </p>
                 </div>
-                
-                <button id='button' onclick="sendSlider()" class="btn btn-primary btn-block btn-large">Get New Location</button>
-            </form>
-        </div>
-
-        <div id="map"></div>
-        
-        <div class = "table">
-            <table class="sortable">
-                <!-- <thead> -->
-                <tr>
-                    <th><h3>Closest Mrt Station</h3></th>
-                    <th><h3>Mrt Line</h3></th>
-
-                    <th><h3>Distance</h3></th>
-                    <th><h3>Boarding Stop</h3></th>
-                    <th><h3>Bus Stop Code</h3></th>
-
-                    <th><h3>Bus Service</h3></th>
-                    <th><h3>Stops to Take</h3></th>
-                    <th><h3>Alighting Stop</h3></th>                
-                <tr>
-                <!-- </thead>
-                <tbody> -->
-                {% if data|length %}
-                    {% for row in data %}
-                        <tr class="item">
-                            <td><h3>{{ row['mrt_station'] }}</h3></td>
-                            <td><h3>{{ row['mrt_line'] }}</h3></td>
-                            <td><h3>{{ row['walkdistance'] }}</h3></td>
-                            <td><h3>{{ row['board_busstopdescription'] }}</h3></td>
-                            <td><h3>{{ row['busstopcode'] }}</h3></td>
-                            <td><h3>{{ row['busservice'] }}</h3></td>
-                            <td><h3>{{ row['numberofstops'] }}</h3></td>
-                            <td><h3>{{ row['alight_busstopdescription'] }}</h3></td>
-                        </tr>
-                    {% endfor %}
-
-                {% else %}
-                    <tr class="item">
-                        <td><h3>NIL</h3></td>
-                        <td><h3>Laobu Can't Find<br>Mrt Near You</h3></td>
-                        <td><h3>NIL</h3></td>
-                        <td><h3>NIL</h3></td>
-                        <td><h3>NIL</h3></td>
-                        <td><h3>NIL</h3></td>
-                        <td><h3>NIL</h3></td>
-                        <td><h3>Laobu Can't Find<br>Mrt Near You</h3></td>
-                    </tr>
-                {% endif %}
-                <!-- </tbody> -->
-
-            </table>
-        </div>
-
-        <div class="footer">
-            <div class="footer_contents">
-                <h6>
-                Made with 🩸, 💦, and 😭 by 
-                <a href="https://hong-yi.me/work/bryanseah234">bryanseah234</a><br>
-                Inspired by
-                <a href="https://t.me/rainkorkorbot">Rain Korkor</a><br>
-                Get some <a href="/help">help</a>
-                </h6>
+                <form action="/getyourlocation" method="POST" style="display: flex; align-items: center; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                        📍 Update Location
+                    </button>
+                </form>
             </div>
-        </div> 
+        </div>
 
-    </body>
-    <!-- Scripts -->
+        <!-- Map -->
+        <div id="map" class="animate-fade-in" style="animation-delay: 0.1s;"></div>
+
+        <!-- Results -->
+        <h2 style="margin-bottom: var(--spacing-md);" class="animate-fade-in">Bus Routes Found ({{ data|length }})</h2>
+
+        {% if data|length > 0 %}
+        <div class="grid-2 animate-fade-in" style="animation-delay: 0.2s;">
+            {% for row in data %}
+            <div class="glass-card">
+                <div class="result-card-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="mrt-dot" style="background-color: 
+                                {% if 'North-South' in row['mrt_line'] %}#d42e12
+                                {% elif 'East-West' in row['mrt_line'] %}#009645
+                                {% elif 'North-East' in row['mrt_line'] %}#9900aa
+                                {% elif 'Circle' in row['mrt_line'] %}#fa9e0d
+                                {% elif 'Downtown' in row['mrt_line'] %}#005ec4
+                                {% elif 'Thomson' in row['mrt_line'] %}#9d5b25
+                                {% else %}#64748b{% endif %}">
+                        </span>
+                        <h3 style="font-size: 1.25rem;">{{ row['mrt_station'] }}</h3>
+                    </div>
+                    <span class="bus-badge">Bus {{ row['busservice'] }}</span>
+                </div>
+
+                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">{{ row['mrt_line'] }}</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Walk</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance']
+                            }}</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Ride</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{
+                            row['numberofstops'] }} stops</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span class="text-muted">Board:</span>
+                        <span style="font-weight: 500;">{{ row['board_busstopdescription'] }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span class="text-muted">Alight:</span>
+                        <span style="font-weight: 500;">{{ row['alight_busstopdescription'] }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="glass-card text-center" style="padding: 4rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">😕</div>
+            <h3>No MRT Stations Found Nearby</h3>
+            <p class="text-muted" style="margin-top: 0.5rem;">Try increasing your search radius or moving to a different
+                location.</p>
+            <a href="/getyourlocation" class="btn btn-primary" style="margin-top: 1.5rem;">Try Again</a>
+        </div>
+        {% endif %}
+
+        <div style="height: 4rem;"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
-        var slider = document.getElementById("slider");
-        var output = document.getElementById("radius");
-        output.innerHTML = slider.value;
-        slider.oninput = function() {
-            output.innerHTML = this.value;
-        }
+        var map = L.map('map').setView([{{ userlat }}, { { userlon } }], 16);
 
-        function sendSlider() {
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
 
-            slider = document.getElementById('slider').value;
-            console.log(slider)
+        // User marker
+        var userIcon = L.icon({
+            iconUrl: '{{ url_for("static", filename="bus.png") }}',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });
 
-            document.form2.submit();
-            // const URL = '/getyourlocation'
-            // const xhr = new XMLHttpRequest();
-            // sender = JSON.stringify(slider)
-            // xhr.open('POST', URL);
-            // xhr.send(sender);
-        }
+        L.marker([{{ userlat }}, {{ userlon }}], { icon: userIcon })
+            .addTo(map)
+            .bindPopup("<b>You are here</b>")
+            .openPopup();
+
+        // Add circles
+        L.circle([{{ userlat }}, {{ userlon }}], {
+            color: '#0B7A75',
+            fillColor: '#0B7A75',
+            fillOpacity: 0.2,
+            radius: {{ ra }} * 1000
+        }).addTo(map);
+
+        // Add bus stops from data
+        {% for row in data %}
+        L.circleMarker([{{ row['busstoplat'] }}, {{ row['busstoplon'] }}], {
+            radius: 6,
+            fillColor: "#F59E0B",
+            color: "#fff",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        })
+            .bindPopup("<b>{{ row['board_busstopdescription'] }}</b><br>Take {{ row['busservice'] }} to {{ row['mrt_station'] }}")
+            .addTo(map);
+        {% endfor %}
     </script>
+</body>
+
 </html>

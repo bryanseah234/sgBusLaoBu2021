@@ -4,14 +4,12 @@ import os
 from functions import coordinates_2_txt, BusStops, BusCompanies, export_json, import_json
 from sqlcommands import commands
 
-from flask_googlemaps import GoogleMaps, Map
-
 #-------------------------------------
 
 '''Initiating instance objects needed'''
 
 stops = BusStops()
-companies = BusCompanies("json/bus_services.json")
+companies = BusCompanies("data/json/bus_services.json")
 
 '''Creating static mrt data for displaying'''
 
@@ -44,12 +42,7 @@ gas = companies.countcategories(gas_categories)
 
 '''Start of Flask WebApp'''
 
-# Get Google Maps API key from environment variable or use a placeholder
-GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'YOUR_API_KEY_HERE')
-
 app = Flask(__name__, template_folder='templates')
-GoogleMaps(app, key=GOOGLE_MAPS_API_KEY)
-
 
 @app.after_request
 def add_header(r):
@@ -90,15 +83,6 @@ def learnbusfacts():
 
 @app.route('/findabus', methods=['POST'])
 def findabus():
-
-    mymap = Map(
-                identifier="view-side",
-                varname="mymap",
-                style="height:720px;width:1100px;margin:0;", 
-                lat=1.3521,  # Singapore latitude
-                lng=103.8198,  # Singapore longitude
-                zoom=15)
-
     if request.method == "POST":
         print(request.form)
         data = []
@@ -160,7 +144,11 @@ def findabus():
 
                     else:
                         pass
-            return render_template('findabus.html', userlon = userlon, userlat = userlat, data=data, mymap=mymap, ra=ra)
+            
+            # Sort data by walking distance
+            data.sort(key=lambda x: int(x['walkdistance'][:-1]))
+            
+            return render_template('findabus.html', userlon = userlon, userlat = userlat, data=data, ra=ra)
 
 
     else:
@@ -175,7 +163,7 @@ def help():
 @app.route('/coordinates', methods=['GET'])
 def coordinates():
     try:
-        with open('txt/coordinates.txt', 'r') as f:
+        with open('data/txt/coordinates.txt', 'r') as f:
             data = f.readlines()
             if data:  # Only pop if there's data
                 data.pop(0)

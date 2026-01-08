@@ -1,261 +1,118 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv='cache-control' content='no-cache'> 
-        <meta http-equiv='expires' content='0'> 
-        <meta http-equiv='pragma' content='no-cache'> 
-        <title>
-            Bus Laobu 🚌
-        </title>
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}">
-        <!-- CSS -->
-        <link rel="manifest" href="manifest.webmanifest">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
-        <!-- BG Audio -->
-        <script>
-            window.addEventListener('load', () => {
-				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-				let xhr = new XMLHttpRequest();
-				xhr.open('GET', 'static/wheels.mp3');
-				xhr.responseType = 'arraybuffer';
-				xhr.addEventListener('load', () => {
-					let playsound = (audioBuffer) => {
-						let source = audioCtx.createBufferSource();
-						source.buffer = audioBuffer;
-						source.connect(audioCtx.destination);
-						source.loop = false;
-						source.start();
+<html lang="en">
 
-						setTimeout(function () {
-							playsound(audioBuffer);
-						}, 1000 + 52*2500);
-					};
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Finder | Bus LaoBu 🚌</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='bus.png') }}">
+</head>
 
-					audioCtx.decodeAudioData(xhr.response).then(playsound);
-				});
-				xhr.send();
-			});
-        </script>
-        <!-- Styling -->
-        <style>
-            .container-fluid {
-                color: white;
-                text-align: center;
-                margin-top: 40px;
-                margin-bottom: auto;
-            }
+<body>
+    <div class="container" style="padding-top: var(--spacing-lg);">
+        <!-- Header -->
+        <header
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;" class="gradient-text">
+                🚌 Bus LaoBu
+            </a>
+        </header>
 
-            #form2{
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 13px;
-            }
-
-            #button{
-                max-width: 230px;
-                text-align: center;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 13px;
-            }
-
-            table {
-                width: 100%;
-                border: 1px;
-                border-color: white;
-                border-collapse: collapse;
-                padding: 10px
-            }    
-
-            h2 {
-                font-size: 60px;
-                font-weight: 500px;
-            }
-
-            h3 {
-                font-size: 20px;
-                font-weight: 500px;
-            }
-
-            h4 {
-                font-size: 18px;
-                font-weight: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 10px;
-            }
-
-            h5 {
-                display: block;
-                font-size: 18px;
-                font-weight: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 10px;
-            }
-
-            label {
-                display: inline;
-                font-weight: 500px;
-                width: 150px;
-                text-align: center;
-            }
-            h6 {
-                font-size: 14px;
-                font-weight: 500px;
-                margin-left: auto;
-                margin-right: auto;
-                padding: 10px;
-            }
-
-        </style>
-
-    </head>
-
-    <body>
-
-        <div class = "container-fluid">
-            <h2>Laobu Bus Finder 🚏</h2>
-            <h4>Hello there! Laobu needs your location for this to work.<br>Click on "allow location access" or input a coordinate<br>to get started! <p id='status'><p></h4>
-            
-            <!-- version2 -->
-            <form id='form2' action='/findabus' method='POST'>
-
-                <div class='slidecontainer'>
-                    <label for="Slider"><h4>Searching buses within <span id="radius"></span> km</h4></label><input type="range" min="0.1" max="0.9" value="{{ ra }}" step="0.1" class="slider" id="slider" name='slider'>
-                </div>
-                
-                <label for="Longitude"><h5>Longtitude:</h5><input type="text" name="longitude" id="getlon"></label> 
-                <label for="Latitude"><h5>Latitude:</h5></label><input type="text" name="latitude" id="getlat"></label>
-                <button id='button' onclick="geoFindMe()" type="button" class="btn btn-primary btn-block btn-large">Get Location</button>
-                <button id='button' type="submit" class="btn btn-primary btn-block btn-large">Find Bus</button>
-            </form>
-
-            <form id='form2' action="/findabus" name="frm1" method="POST">
-                <input type="hidden" id="getslider" name='slider'>
-                <input type="hidden" id="getlon1" name="longitude1">
-                <input type="hidden" id="getlat1" name="latitude1">
-            </form>
-        </div>
-
-
-        <div class="footer">
-            <div class="footer_contents">
-                <h6>
-                Made with 🩸, 💦, and 😭 by 
-                <a href="https://hong-yi.me/work/bryanseah234">bryanseah234</a><br>
-                Inspired by
-                <a href="https://t.me/rainkorkorbot">Rain Korkor</a><br>
-                Get some <a href="/help">help</a>
-                </h6>
+        <div class="glass-card animate-fade-in" style="max-width: 600px; margin: 0 auto;">
+            <div class="text-center mb-8">
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Find Nearby Buses 🚏</h2>
+                <p class="text-muted">We need your location to find the best route</p>
+                <div id="status" class="text-accent" style="margin-top: 1rem; min-height: 1.5rem;"></div>
             </div>
-        </div>
-    </body>    
 
-    <!-- Scripts -->
-    <!-- <script src="static/getyourlocation.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>      
+            <form id="locationForm" action="/findabus" method="POST">
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: 0.5rem;">Search Radius: <span id="radius-val"
+                            class="text-primary">0.2</span> km</label>
+                    <input type="range" name="slider" id="slider" min="0.1" max="1.0" step="0.1" value="{{ ra }}">
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">
+                        <span>100m</span>
+                        <span>1km</span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Manual Coordinates
+                        (Optional)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" name="latitude1" id="getlat" placeholder="Latitude">
+                        <input type="text" name="longitude1" id="getlon" placeholder="Longitude">
+                    </div>
+                </div>
+
+                <!-- Hidden inputs for auto-location -->
+                <input type="hidden" name="latitude" id="auto-lat">
+                <input type="hidden" name="longitude" id="auto-lon">
+
+                <div class="grid-2">
+                    <button type="button" class="btn btn-secondary" onclick="getLocation()">
+                        📍 Get My Location
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        🔍 Find Bus
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Made with <span style="color: #ef4444">❤️</span> by <a
+                    href="https://hong-yi.me/work/bryanseah234">bryanseah234</a></p>
+        </div>
+    </footer>
 
     <script>
-        var slider = document.getElementById("slider");
-        var output = document.getElementById("radius");
+        const slider = document.getElementById("slider");
+        const output = document.getElementById("radius-val");
+
         output.innerHTML = slider.value;
-        slider.oninput = function() {
+        slider.oninput = function () {
             output.innerHTML = this.value;
         }
 
-        function geoFindMe() {
+        function getLocation() {
+            const status = document.getElementById('status');
+            const latInput = document.getElementById('getlat');
+            const lonInput = document.getElementById('getlon');
+            const autoLat = document.getElementById('auto-lat');
+            const autoLon = document.getElementById('auto-lon');
 
-            const status = document.querySelector('#status');
-            const latitudetext = document.querySelector('#getlat1');
-            const longtitudetext = document.querySelector('#getlon1');
-
-            latitudetext.value = ""
-            longtitudetext.value = ""
-
-            function success(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                status.textContent = '';
-                latitudetext.value = `${latitude}`;
-                longitudetext.value = `${longitude}`;
-            }
-
-            function error() {
-                status.textContent = 'Status: Laobu is unable to retrieve your location.';
-            }
+            status.textContent = 'Getting location...';
 
             if (!navigator.geolocation) {
-                status.textContent = 'Status: Laobu thinks your browser does not support geolocation.';
+                status.textContent = 'Geolocation is not supported by your browser';
             } else {
-                navigator.geolocation.getCurrentPosition(success, error);
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        status.textContent = 'Location found! Ready to search.';
+                        status.style.color = '#4dcac3';
+
+                        // Populate inputs
+                        latInput.value = lat;
+                        lonInput.value = lon;
+                        autoLat.value = lat;
+                        autoLon.value = lon;
+                    },
+                    (error) => {
+                        status.textContent = 'Unable to retrieve your location';
+                        status.style.color = '#ef4444';
+                    }
+                );
             }
-
         }
-        // window.onload = geoFindMe();
-
-        document.addEventListener('DOMContentLoaded', () => {
-            getLocation();
-        });
-
-        function onlyAllowOneCall(fn){
-            var hasBeenCalled = false;    
-            return function(){
-                if (hasBeenCalled){
-                    throw Error("Laobu tried to get your location twice")
-                }
-                hasBeenCalled = true;
-                return fn.apply(this, arguments)
-            }
-        }
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(showPosition);
-            }       
-        }
-
-        function showPosition(position, callback) {
-            callback = onlyAllowOneCall(callback)
-            console.log(position);
-            document.frm1.getlat1.value = position.coords.latitude;
-            document.frm1.getlon1.value = position.coords.longitude;
-            slider = document.getElementById('slider');
-            console.log(slider.value)
-            document.frm1.getslider.value = slider.value;
-            document.frm1.submit();
-
-
-            longitude = document.getElementById('getlon1').value;
-            latitude = document.getElementById('getlat1').value;
-            slider = document.getElementById('getslider').value;
-
-            // var coordinates = lon+','+lat;
-            // console.log(coordinates)
-            // const URL = '/findabus'
-            // const xhr = new XMLHttpRequest();
-            // sender = JSON.stringify(coordinates)
-            // xhr.open('POST', URL);
-            // xhr.send(sender);
-        }
-
-        function positionError(error) {
-            if (error.PERMISSION_DENIED) alert('Please let Laobu get your location');
-            hideLoadingDiv();
-            showError('Laobu could not determine your location, Laobu needs you to refresh the page and click "allow"');
-        }
-        </script>
-
+    </script>
+</body>
 
 </html>
