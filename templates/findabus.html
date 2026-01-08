@@ -59,7 +59,7 @@
                                 {% elif 'Circle' in row['mrt_line'] %}#fa9e0d
                                 {% elif 'Downtown' in row['mrt_line'] %}#005ec4
                                 {% elif 'Thomson' in row['mrt_line'] %}#9d5b25
-                                {% else %}#64748b{% endif %}">
+                                {% else %}#64748b{% endif %};">
                         </span>
                         <h3 style="font-size: 1.25rem;">{{ row['mrt_station'] }}</h3>
                     </div>
@@ -71,13 +71,11 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Walk</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance']
-                            }}</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance'] }}</div>
                     </div>
                     <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Ride</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{
-                            row['numberofstops'] }} stops</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{ row['numberofstops'] }} stops</div>
                     </div>
                 </div>
 
@@ -98,8 +96,7 @@
         <div class="glass-card text-center" style="padding: 4rem;">
             <div style="font-size: 3rem; margin-bottom: 1rem;">😕</div>
             <h3>No MRT Stations Found Nearby</h3>
-            <p class="text-muted" style="margin-top: 0.5rem;">Try increasing your search radius or moving to a different
-                location.</p>
+            <p class="text-muted" style="margin-top: 0.5rem;">Try increasing your search radius or moving to a different location.</p>
             <a href="/getyourlocation" class="btn btn-primary" style="margin-top: 1.5rem;">Try Again</a>
         </div>
         {% endif %}
@@ -111,48 +108,63 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
-        var map = L.map('map').setView([{{ userlat }}, { { userlon } }], 16);
+        console.log("Initializing FindABus Map...");
+        console.log("User Location: Lat {{ userlat }}, Lon {{ userlon }}");
+        console.log("Search Radius: {{ ra }} km");
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20
-        }).addTo(map);
+        try {
+            var map = L.map('map').setView([{{ userlat }}, {{ userlon }}], 16);
 
-        // User marker
-        var userIcon = L.icon({
-            iconUrl: '{{ url_for("static", filename="bus.png") }}',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15],
-            popupAnchor: [0, -15]
-        });
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
 
-        L.marker([{{ userlat }}, {{ userlon }}], { icon: userIcon })
-            .addTo(map)
-            .bindPopup("<b>You are here</b>")
-            .openPopup();
+            // User marker
+            var userIcon = L.icon({
+                iconUrl: "{{ url_for('static', filename='bus.png') }}",
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -15]
+            });
 
-        // Add circles
-        L.circle([{{ userlat }}, {{ userlon }}], {
-            color: '#0B7A75',
-            fillColor: '#0B7A75',
-            fillOpacity: 0.2,
-            radius: {{ ra }} * 1000
-        }).addTo(map);
+            L.marker([{{ userlat }}, {{ userlon }}], { icon: userIcon })
+                .addTo(map)
+                .bindPopup("<b>You are here</b>")
+                .openPopup();
 
-        // Add bus stops from data
-        {% for row in data %}
-        L.circleMarker([{{ row['busstoplat'] }}, {{ row['busstoplon'] }}], {
-            radius: 6,
-            fillColor: "#F59E0B",
-            color: "#fff",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        })
-            .bindPopup("<b>{{ row['board_busstopdescription'] }}</b><br>Take {{ row['busservice'] }} to {{ row['mrt_station'] }}")
-            .addTo(map);
-        {% endfor %}
+            // Add circles
+            L.circle([{{ userlat }}, {{ userlon }}], {
+                color: '#0B7A75',
+                fillColor: '#0B7A75',
+                fillOpacity: 0.2,
+                radius: {{ ra }} * 1000
+            }).addTo(map);
+
+            console.log("Map initialized. Adding {{ data|length }} bus stops...");
+
+            // Add bus stops from data
+            var busStops = {{ data | tojson }};
+            busStops.forEach(function(row) {
+                console.log("Adding marker: Bus " + row.busservice + " at " + row.board_busstopdescription);
+                L.circleMarker([parseFloat(row.busstoplat), parseFloat(row.busstoplon)], {
+                    radius: 6,
+                    fillColor: "#F59E0B",
+                    color: "#fff",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                })
+                    .bindPopup("<b>" + row.board_busstopdescription + "</b><br>Take " + row.busservice + " to " + row.mrt_station)
+                    .addTo(map);
+            });
+
+            console.log("All markers added successfully.");
+
+        } catch (error) {
+            console.error("Critical error in map initialization:", error);
+        }
     </script>
 </body>
 
