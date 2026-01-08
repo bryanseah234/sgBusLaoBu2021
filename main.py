@@ -128,9 +128,19 @@ def findabus():
                         numberofstops = abs(int(startsequence) - int(endsequence))
                         distance_metres_rounded = int(busstop['Distance']*1000)
 
+                        # Determine MRT Line Color
+                        if 'North-South' in mrtline: mrt_color = '#d42e12'
+                        elif 'East-West' in mrtline: mrt_color = '#009645'
+                        elif 'North-East' in mrtline: mrt_color = '#9900aa'
+                        elif 'Circle' in mrtline: mrt_color = '#fa9e0d'
+                        elif 'Downtown' in mrtline: mrt_color = '#005ec4'
+                        elif 'Thomson' in mrtline: mrt_color = '#9d5b25'
+                        else: mrt_color = '#64748b'
+
                         dic = {
                             "mrt_station": mrtstation,
                             "mrt_line": mrtline,
+                            "mrt_color": mrt_color,
                             "walkdistance": f"{distance_metres_rounded}m",
                             "board_busstopdescription": busstop['Description'].title(),
                             "busstopcode": busstopcode,
