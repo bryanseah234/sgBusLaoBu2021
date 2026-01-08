@@ -22,7 +22,7 @@
         </h1>
 
         <!-- Overview Stats -->
-        <div class="grid-4 animate-fade-in" style="margin-bottom: 3rem;">
+        <div class="grid-4 animate-fade-in" style="margin-bottom: 1rem;">
             <div class="glass-card text-center">
                 <div class="stat-value" style="color: #e11d48">{{ smrt_len }}</div>
                 <div class="text-muted">SMRT Services</div>
@@ -41,13 +41,13 @@
             </div>
         </div>
 
-        <!-- Detailed Breakdowns -->
-        <div class="grid-2 animate-fade-in" style="animation-delay: 0.2s;">
+        <!-- Detailed Breakdowns (Aligned in same 4 columns) -->
+        <div class="grid-4 animate-fade-in" style="animation-delay: 0.2s;">
 
             <!-- SMRT -->
             <div class="glass-card">
                 <h3 style="color: #e11d48; margin-bottom: 1rem;">SMRT Buses</h3>
-                <div class="grid-2" style="font-size: 0.9rem;">
+                <div style="font-size: 0.8rem;">
                     {% for category, count in smrt.items() %}
                     {% if count > 0 %}
                     <div
@@ -63,7 +63,7 @@
             <!-- SBS -->
             <div class="glass-card">
                 <h3 style="color: #7c3aed; margin-bottom: 1rem;">SBS Transit</h3>
-                <div class="grid-2" style="font-size: 0.9rem;">
+                <div style="font-size: 0.8rem;">
                     {% for category, count in sbst.items() %}
                     {% if count > 0 %}
                     <div
@@ -79,7 +79,7 @@
             <!-- Tower Transit -->
             <div class="glass-card">
                 <h3 style="color: #0ea5e9; margin-bottom: 1rem;">Tower Transit</h3>
-                <div class="grid-2" style="font-size: 0.9rem;">
+                <div style="font-size: 0.8rem;">
                     {% for category, count in tts.items() %}
                     {% if count > 0 %}
                     <div
@@ -94,8 +94,8 @@
 
             <!-- Google Ahead -->
             <div class="glass-card">
-                <h3 style="color: #22c55e; margin-bottom: 1rem;">Go-Ahead Singapore</h3>
-                <div class="grid-2" style="font-size: 0.9rem;">
+                <h3 style="color: #22c55e; margin-bottom: 1rem;">Go-Ahead</h3>
+                <div style="font-size: 0.8rem;">
                     {% for category, count in gas.items() %}
                     {% if count > 0 %}
                     <div
