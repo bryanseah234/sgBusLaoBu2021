@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bus LaoBu 🚌 | Singapore Bus Finder</title>
-    
+
     <!-- Design System -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
+
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='bus.png') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='bus.png') }}">
     <meta name="theme-color" content="#0B7A75">
 </head>
+
 <body>
 
     <main class="hero container">
@@ -20,7 +22,7 @@
         <h1 class="hero-title animate-fade-in">
             <span class="gradient-text">Bus LaoBu</span>
         </h1>
-        
+
         <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.1s">
             Your friendly guide to finding the nearest bus to an MRT station in Singapore 🇸🇬
         </p>
@@ -31,7 +33,7 @@
                 <h3 style="margin-bottom: 0.5rem;">Bus Finder</h3>
                 <p class="text-muted">Find nearby buses to MRT</p>
             </a>
-            
+
             <a href="/learnbusfacts" class="glass-card text-center text-white" style="text-decoration: none;">
                 <div style="font-size: 3rem; margin-bottom: 0.5rem;">📊</div>
                 <h3 style="margin-bottom: 0.5rem;">Bus Facts</h3>
@@ -42,13 +44,15 @@
 
     <footer>
         <div class="container">
-            <p>Made with <span style="color: #ef4444">❤️</span> by <a href="https://hong-yi.me/work/bryanseah234" target="_blank">bryanseah234</a></p>
+            <p>Made with <span style="color: #ef4444">❤️</span> by <a href="https://hong-yi.me"
+                    target="_blank">bryanseah234</a></p>
             <p style="margin-top: 0.5rem;">
-                <a href="/help">Help</a> • 
+                <a href="/help">Help</a> •
                 Inspired by <a href="https://t.me/rainkorkorbot" target="_blank">Rain Korkor</a>
             </p>
         </div>
     </footer>
 
 </body>
+
 </html>

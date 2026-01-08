@@ -14,8 +14,8 @@
 <body>
     <div class="container" style="padding-top: var(--spacing-sm);">
         <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
-            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;" class="gradient-text">
-                🚌 Bus LaoBu
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;">
+                <span>🚌</span> <span class="gradient-text">Bus LaoBu</span>
             </a>
             <a href="/getyourlocation" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
                 Back to Search
@@ -63,11 +63,13 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Walk</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance'] }}</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance']
+                            }}</div>
                     </div>
                     <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Ride</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{ row['numberofstops'] }} stops</div>
+                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{
+                            row['numberofstops'] }} stops</div>
                     </div>
                 </div>
 
@@ -106,7 +108,7 @@
         console.log("Search Radius: {{ ra }} km");
 
         try {
-            var map = L.map('map').setView([{{ userlat }}, {{ userlon }}], 16);
+            var map = L.map('map').setView([{{ userlat }}, { { userlon } }], 16);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
