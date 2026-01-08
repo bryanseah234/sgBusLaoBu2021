@@ -8,7 +8,7 @@ def coordinates_2_txt(userlon=None, userlat=None):
     stores user's coordiantes into a txt file for easy debugging
     '''
     try:
-        with open("txt/coordinates.txt", 'a') as f:
+        with open("data/txt/coordinates.txt", 'a') as f:
             coordinates = f"({str(userlon)}, {str(userlat)})"
             f.write(coordinates)
             f.write("\n")
@@ -115,7 +115,7 @@ class BusStops:
         if type(description) is not str:
             print("Please input description as a string.")
         else:
-            with open("csv/stations.csv", "r", newline="") as f:            
+            with open("data/csv/stations.csv", "r", newline="") as f:            
                 data = csv.DictReader(f)
                 for dic in data:
                     mrtnames.append(dic)
@@ -133,7 +133,7 @@ class BusStops:
             print('Please input command as a string, radius as float, and coordinates as floats.')
         else:
             allbusstops = []
-            con = sqlite3.connect("database/main.db")
+            con = sqlite3.connect("data/database/main.db")
             con.row_factory = sqlite3.Row
             cur = con.cursor()
             cur.execute(command)
@@ -172,7 +172,7 @@ class BusStops:
             print("Please input command as a string.")
         else:
             allmrtbusstops = []
-            con = sqlite3.connect("database/main.db")
+            con = sqlite3.connect("data/database/main.db")
             con.row_factory = sqlite3.Row
             cur = con.cursor()
             cur.execute(command)
@@ -204,7 +204,7 @@ class BusStops:
         if type(command) is not str or type(serviceno) is not str or type(direction) is not str or type(busstopcode) is not str:
             print("Please input all inputs as a string.")
         else:
-            con = sqlite3.connect("database/main.db")
+            con = sqlite3.connect("data/database/main.db")
             con.row_factory = sqlite3.Row
             cur = con.cursor()
             cur.execute(command, (serviceno,direction,busstopcode))
@@ -235,7 +235,7 @@ class BusCompanies():
             print('Please input a bus company name as a string')
         elif type(company) is str:
             services = []
-            with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
+            with open ("data/json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
             for d in data:
                 if company == d['Operator']:
@@ -255,7 +255,7 @@ class BusCompanies():
             print('Please input a bus company name as a string')
         elif type(company) is str:
             categories = []
-            with open ("json/bus_services.json", 'r', encoding = "utf-8") as f:
+            with open ("data/json/bus_services.json", 'r', encoding = "utf-8") as f:
                 data = json.load(f)
             for d in data:
                 if company == d['Operator']:
