@@ -305,3 +305,78 @@ footer a:hover {
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
+
+/* Group Selector */
+.group-select {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.group-select:hover {
+  border-color: var(--primary);
+}
+
+.group-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(11, 122, 117, 0.3);
+}
+
+.group-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Group Sections */
+.group-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.group-section.collapsed .group-header {
+  margin-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.group-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-light);
+  margin-bottom: var(--spacing-sm);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.group-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.collapse-icon {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.group-content {
+  margin-top: var(--spacing-sm);
+}
+
+.group-count {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: auto;
+}
