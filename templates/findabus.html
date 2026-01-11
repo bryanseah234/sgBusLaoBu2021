@@ -43,49 +43,26 @@
         <!-- Map -->
         <div id="map" class="animate-fade-in" style="animation-delay: 0.1s;"></div>
 
-        <!-- Results -->
-        <h2 style="margin-bottom: var(--spacing-md);" class="animate-fade-in">Bus Routes Found ({{ data|length }})</h2>
+        <!-- Results Header with Grouping Controls -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: var(--spacing-md);"
+            class="animate-fade-in">
+            <h2>Bus Routes Found ({{ data|length }})</h2>
+            {% if data|length > 0 %}
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <label for="groupBy" class="text-muted" style="font-size: 0.9rem;">Group by:</label>
+                <select id="groupBy" class="group-select">
+                    <option value="none" selected>Walking Distance</option>
+                    <option value="board_busstopdescription">Board Stop</option>
+                    <option value="alight_busstopdescription">Alight Stop</option>
+                    <option value="busservice">Bus Number</option>
+                    <option value="mrt_station">MRT Station</option>
+                </select>
+            </div>
+            {% endif %}
+        </div>
 
         {% if data|length > 0 %}
-        <div class="grid-2 animate-fade-in" style="animation-delay: 0.2s;">
-            {% for row in data %}
-            <div class="glass-card">
-                <div class="result-card-header">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="mrt-dot" style="background-color: {{ row['mrt_color'] }};"></span>
-                        <h3 style="font-size: 1.25rem;">{{ row['mrt_station'] }}</h3>
-                    </div>
-                    <span class="bus-badge">Bus {{ row['busservice'] }}</span>
-                </div>
-
-                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">{{ row['mrt_line'] }}</p>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Walk</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">{{ row['walkdistance']
-                            }}</div>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Ride</div>
-                        <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">{{
-                            row['numberofstops'] }} stops</div>
-                    </div>
-                </div>
-
-                <div style="font-size: 0.9rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span class="text-muted">Board:</span>
-                        <span style="font-weight: 500;">{{ row['board_busstopdescription'] }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span class="text-muted">Alight:</span>
-                        <span style="font-weight: 500;">{{ row['alight_busstopdescription'] }}</span>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        <div id="results-container" class="animate-fade-in" style="animation-delay: 0.2s;"></div>
         {% else %}
         <div class="glass-card text-center" style="padding: 4rem;">
             <div style="font-size: 3rem; margin-bottom: 1rem;">😕</div>
@@ -110,11 +87,26 @@
         try {
             var map = L.map('map').setView([{{ userlat }}, {{ userlon }}], 16);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        // Primary: CARTO dark tiles
+        var cartoTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
             maxZoom: 20
-        }).addTo(map);
+        });
+
+        // Fallback: Standard OSM tiles
+        var osmTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        });
+
+        // Try CARTO first, fallback to OSM on error
+        cartoTiles.on('tileerror', function (error, tile) {
+            console.warn("CARTO tile failed, switching to OSM tiles");
+            map.removeLayer(cartoTiles);
+            osmTiles.addTo(map);
+        });
+        cartoTiles.addTo(map);
 
         // User marker
         var userIcon = L.icon({
@@ -129,7 +121,7 @@
             .bindPopup("<b>You are here</b>")
             .openPopup();
 
-        // Add circles
+        // Add radius circle
         L.circle([{{ userlat }}, {{ userlon }}], {
             color: '#0B7A75',
             fillColor: '#0B7A75',
@@ -142,7 +134,6 @@
         // Add bus stops from data
         var busStops = {{ data | tojson }};
         busStops.forEach(function (row) {
-            console.log("Adding marker: Bus " + row.busservice + " at " + row.board_busstopdescription);
             L.circleMarker([parseFloat(row.busstoplat), parseFloat(row.busstoplon)], {
                 radius: 6,
                 fillColor: "#F59E0B",
@@ -157,8 +148,155 @@
 
         console.log("All markers added successfully.");
 
+        // Ensure map renders correctly after container becomes visible
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 100);
+
         } catch (error) {
             console.error("Critical error in map initialization:", error);
+            document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">Map failed to load. Please refresh the page.</div>';
+        }
+    </script>
+
+    <!-- Grouping Logic -->
+    <script>
+        var allRoutes = {{ data | tojson }};
+        var container = document.getElementById('results-container');
+        var groupSelect = document.getElementById('groupBy');
+
+        // Labels for each grouping type
+        var groupLabels = {
+            'board_busstopdescription': 'Board at',
+            'alight_busstopdescription': 'Alight at',
+            'busservice': 'Bus'
+        };
+
+        // Determine station type (MRT vs LRT) from mrt_line field
+        function getStationType(routes) {
+            if (!routes || routes.length === 0) return 'Station';
+            var line = routes[0].mrt_line || '';
+            if (line.toLowerCase().includes('lrt')) return 'LRT Station';
+            return 'MRT Station';
+        }
+
+        function createRouteCard(row) {
+            return `
+                <div class="glass-card">
+                    <div class="result-card-header">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="mrt-dot" style="background-color: ${row.mrt_color};"></span>
+                            <h3 style="font-size: 1.25rem;">${row.mrt_station}</h3>
+                        </div>
+                        <span class="bus-badge">Bus ${row.busservice}</span>
+                    </div>
+                    <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">${row.mrt_line}</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Walk</div>
+                            <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">${row.walkdistance}</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Ride</div>
+                            <div style="font-size: 1.25rem; font-weight: bold; color: var(--secondary);">${row.numberofstops} stops</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span class="text-muted">Board:</span>
+                            <span style="font-weight: 500;">${row.board_busstopdescription}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="text-muted">Alight:</span>
+                            <span style="font-weight: 500;">${row.alight_busstopdescription}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function groupBy(array, key) {
+            return array.reduce(function (result, item) {
+                var groupKey = item[key];
+                if (!result[groupKey]) {
+                    result[groupKey] = [];
+                }
+                result[groupKey].push(item);
+                return result;
+            }, {});
+        }
+
+        function toggleGroup(header) {
+            var section = header.parentElement;
+            var content = section.querySelector('.group-content');
+            var icon = header.querySelector('.collapse-icon');
+
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.textContent = '▼';
+                section.classList.remove('collapsed');
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▶';
+                section.classList.add('collapsed');
+            }
+        }
+
+        function renderResults(groupByField) {
+            if (!container) return;
+
+            if (groupByField === 'none') {
+                // No grouping - just render grid
+                var html = '<div class="grid-2">';
+                allRoutes.forEach(function (row) {
+                    html += createRouteCard(row);
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } else {
+                // Grouped rendering
+                var grouped = groupBy(allRoutes, groupByField);
+                var keys = Object.keys(grouped).sort();
+                var html = '';
+
+                keys.forEach(function (key) {
+                    var routes = grouped[key];
+                    var label = groupLabels[groupByField];
+
+                    // For mrt_station, dynamically determine LRT vs MRT
+                    if (groupByField === 'mrt_station') {
+                        label = getStationType(routes);
+                    }
+
+                    html += `
+                        <div class="group-section">
+                            <h3 class="group-header" onclick="toggleGroup(this)">
+                                <span class="collapse-icon">▼</span>
+                                ${label} ${key} 
+                                <span class="group-count">(${routes.length})</span>
+                            </h3>
+                            <div class="group-content">
+                                <div class="grid-2">
+                    `;
+                    routes.forEach(function (row) {
+                        html += createRouteCard(row);
+                    });
+                    html += '</div></div></div>';
+                });
+                container.innerHTML = html;
+            }
+        }
+
+        // Initial render
+        if (allRoutes && allRoutes.length > 0) {
+            renderResults('none');
+        }
+
+        // Event listener for grouping change
+        if (groupSelect) {
+            groupSelect.addEventListener('change', function () {
+                renderResults(this.value);
+            });
         }
     </script>
 </body>
