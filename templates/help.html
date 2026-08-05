@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help | Bus LaoBu 🚌</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='bus.png') }}">
+</head>
+
+<body>
+    <div class="container" style="padding-top: var(--spacing-sm); max-width: 800px;">
+        <header style="padding: 1rem 0; margin-bottom: 2rem;">
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;">
+                <span>🚌</span> <span class="gradient-text">Bus LaoBu</span>
+            </a>
+        </header>
+
+        <h1 class="text-center animate-fade-in" style="margin-bottom: 3rem;">
+            Help Center 🆘
+        </h1>
+
+        <div class="animate-fade-in">
+            <div class="glass-card" style="margin-bottom: 1.5rem;">
+                <h3 class="text-primary" style="margin-bottom: 0.5rem;">How does this work?</h3>
+                <p class="text-muted">Bus LaoBu calculates the distance between your location and nearby bus stops. It
+                    then checks if any buses from those stops go directly to an MRT station, showing you the fastest
+                    walking + riding combinations.</p>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 1.5rem;">
+                <h3 class="text-primary" style="margin-bottom: 0.5rem;">Why can't I find any results?</h3>
+                <p class="text-muted">Try increasing your search radius slider. If you're too far from a bus stop that
+                    connects to an MRT, or if you're already very close to an MRT, results might be limited.</p>
+            </div>
+
+            <div class="glass-card" style="margin-bottom: 1.5rem;">
+                <h3 class="text-primary" style="margin-bottom: 0.5rem;">Is the data accurate?</h3>
+                <p class="text-muted">We use LTA DataMall data for bus routes and stops. Distance calculations are
+                    estimates "as the crow flies" (straight line distance).</p>
+            </div>
+
+            <div class="glass-card text-center" style="margin-top: 3rem;">
+                <h3>Still need help?</h3>
+                <p class="text-muted" style="margin-bottom: 1.5rem;">Contact the developer directly.</p>
+                <a href="https://hong-yi.me" target="_blank" class="btn btn-primary">Contact
+                    Developer</a>
+            </div>
+        </div>
+
+        <div style="height: 4rem;"></div>
+    </div>
+</body>
+
+</html>

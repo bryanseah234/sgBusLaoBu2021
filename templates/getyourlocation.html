@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Finder | Bus LaoBu 🚌</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='bus.png') }}">
+</head>
+
+<body>
+    <div class="container" style="padding-top: var(--spacing-lg);">
+        <!-- Header -->
+        <header
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;">
+                <span>🚌</span> <span class="gradient-text">Bus LaoBu</span>
+            </a>
+        </header>
+
+        <div class="glass-card animate-fade-in" style="max-width: 600px; margin: 0 auto;">
+            <div class="text-center mb-8">
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Find Nearby Buses 🚏</h2>
+                <p class="text-muted">We need your location to find the best route</p>
+                <div id="status" class="text-accent" style="margin-top: 1rem; min-height: 1.5rem;"></div>
+            </div>
+
+            <form id="locationForm" action="/findabus" method="POST">
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: 0.5rem;">Search Radius: <span id="radius-val"
+                            class="text-primary">0.2</span> km</label>
+                    <input type="range" name="slider" id="slider" min="0.1" max="1.0" step="0.1" value="{{ ra }}">
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">
+                        <span>100m</span>
+                        <span>1km</span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Manual Coordinates
+                        (Optional)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" name="latitude1" id="getlat" placeholder="Latitude">
+                        <input type="text" name="longitude1" id="getlon" placeholder="Longitude">
+                    </div>
+                </div>
+
+                <!-- Hidden inputs for auto-location -->
+                <input type="hidden" name="latitude" id="auto-lat">
+                <input type="hidden" name="longitude" id="auto-lon">
+
+                <div class="grid-2">
+                    <button type="button" class="btn btn-secondary" onclick="getLocation()">
+                        📍 Get My Location
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        🔍 Find Bus
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Made with <span style="color: #ef4444">❤️</span> by <a href="https://hong-yi.me">bryanseah234</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const slider = document.getElementById("slider");
+        const output = document.getElementById("radius-val");
+
+        output.innerHTML = slider.value;
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+
+        function getLocation() {
+            const status = document.getElementById('status');
+            const latInput = document.getElementById('getlat');
+            const lonInput = document.getElementById('getlon');
+            const autoLat = document.getElementById('auto-lat');
+            const autoLon = document.getElementById('auto-lon');
+
+            status.textContent = 'Getting location...';
+
+            if (!navigator.geolocation) {
+                status.textContent = 'Geolocation is not supported by your browser';
+            } else {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        status.textContent = 'Location found! Ready to search.';
+                        status.style.color = '#4dcac3';
+
+                        // Populate inputs
+                        latInput.value = lat;
+                        lonInput.value = lon;
+                        autoLat.value = lat;
+                        autoLon.value = lon;
+                    },
+                    (error) => {
+                        status.textContent = 'Unable to retrieve your location';
+                        status.style.color = '#ef4444';
+                    }
+                );
+            }
+        }
+    </script>
+</body>
+
+</html>
