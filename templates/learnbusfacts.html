@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Facts | Bus LaoBu 🚌</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='bus.png') }}">
+</head>
+
+<body>
+    <div class="container" style="padding-top: var(--spacing-sm);">
+        <header style="padding: 1rem 0; margin-bottom: 2rem;">
+            <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: bold;">
+                <span>🚌</span> <span class="gradient-text">Bus LaoBu</span>
+            </a>
+        </header>
+
+        <h1 class="text-center animate-fade-in" style="margin-bottom: 3rem;">
+            Singapore Bus Facts 📊
+        </h1>
+
+        <!-- Overview Stats -->
+        <div class="grid-4 animate-fade-in" style="margin-bottom: 1rem;">
+            <div class="glass-card text-center">
+                <div class="stat-value" style="color: #e11d48">{{ smrt_len }}</div>
+                <div class="text-muted">SMRT Services</div>
+            </div>
+            <div class="glass-card text-center">
+                <div class="stat-value" style="color: #7c3aed">{{ sbst_len }}</div>
+                <div class="text-muted">SBS Transit</div>
+            </div>
+            <div class="glass-card text-center">
+                <div class="stat-value" style="color: #0ea5e9">{{ tts_len }}</div>
+                <div class="text-muted">Tower Transit</div>
+            </div>
+            <div class="glass-card text-center">
+                <div class="stat-value" style="color: #22c55e">{{ gas_len }}</div>
+                <div class="text-muted">Go-Ahead</div>
+            </div>
+        </div>
+
+        <!-- Detailed Breakdowns (Aligned in same 4 columns) -->
+        <div class="grid-4 animate-fade-in" style="animation-delay: 0.2s;">
+
+            <!-- SMRT -->
+            <div class="glass-card">
+                <h3 style="color: #e11d48; margin-bottom: 1rem;">SMRT Buses</h3>
+                <div style="font-size: 0.8rem;">
+                    {% for category, count in smrt.items() %}
+                    {% if count > 0 %}
+                    <div
+                        style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0;">
+                        <span>{{ category }}</span>
+                        <span style="font-weight: bold;">{{ count }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- SBS -->
+            <div class="glass-card">
+                <h3 style="color: #7c3aed; margin-bottom: 1rem;">SBS Transit</h3>
+                <div style="font-size: 0.8rem;">
+                    {% for category, count in sbst.items() %}
+                    {% if count > 0 %}
+                    <div
+                        style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0;">
+                        <span>{{ category }}</span>
+                        <span style="font-weight: bold;">{{ count }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Tower Transit -->
+            <div class="glass-card">
+                <h3 style="color: #0ea5e9; margin-bottom: 1rem;">Tower Transit</h3>
+                <div style="font-size: 0.8rem;">
+                    {% for category, count in tts.items() %}
+                    {% if count > 0 %}
+                    <div
+                        style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0;">
+                        <span>{{ category }}</span>
+                        <span style="font-weight: bold;">{{ count }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Google Ahead -->
+            <div class="glass-card">
+                <h3 style="color: #22c55e; margin-bottom: 1rem;">Go-Ahead</h3>
+                <div style="font-size: 0.8rem;">
+                    {% for category, count in gas.items() %}
+                    {% if count > 0 %}
+                    <div
+                        style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 0;">
+                        <span>{{ category }}</span>
+                        <span style="font-weight: bold;">{{ count }}</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 4rem;"></div>
+
+        <footer>
+            <div class="container text-center">
+                <a href="/" class="btn btn-secondary">← Back Home</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
