@@ -1,4 +1,8 @@
 # SG BusLaoBu
+
+
+![Project screenshot](./screenshot.png)
+
 A repository for a bus app in Python (Capstone Project)
 
 ## Disclaimer:
