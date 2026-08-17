@@ -100,6 +100,7 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+
 # AI / editor dot directories (managed via sourcerepo)
 .*
 !.github/
